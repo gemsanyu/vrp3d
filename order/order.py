@@ -1,6 +1,6 @@
 from typing import Tuple
 
-from vehicle.item import Item
+from order.item import Item
 
 class Order:
     def __init__(self,

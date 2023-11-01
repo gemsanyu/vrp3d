@@ -21,5 +21,5 @@ class VRP3D:
             self.distance_matrix = np.asanyarray(distance_matrix,dtype=float)
         else:
             self.distance_matrix = haversine_distances(self.coords).astype(float)
-
+    
     # def compute_cost()

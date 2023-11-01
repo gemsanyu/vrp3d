@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 
-from vehicle.item import Item
+from order.item import Item
 from vehicle.utils import is_overlapping_3d, compute_supported_area
 
 # new_eps = [

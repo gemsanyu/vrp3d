@@ -1,7 +1,7 @@
 from random import randint
 
 from vehicle.box import Box
-from vehicle.item import Item
+from order.item import Item
 
 
 def run():
