@@ -3,6 +3,9 @@ from typing import Tuple, Optional
 from vehicle.box import Box
 # from vehicle.utils import TEMP..
 
+WC_COMPUTATION_SHR = 0
+WC_COMPUTATION_CUM = 1
+
 
 class Vehicle:
     """
@@ -27,6 +30,7 @@ class Vehicle:
         # self. = 
 
         self.tour = []
+        self.packing_order = []
         self.arrival_time_list = []
 
 
