@@ -102,8 +102,8 @@ def cmp_item_cha(item1:Item, item2:Item, height:int, dt:float):
     return 0
 
 def sort_items_cha(box_list: List[Box], item_list: List[Item], dt:float) -> List[Item]:
-    max_box_height = max([box.size[2] for box in box_list])
-    cmp_func = partial(cmp_item_cha, height=max_box_height, dt=dt)
+    box_height = box_list[0].size[2]
+    cmp_func = partial(cmp_item_cha, height=box_height, dt=dt)
     item_list = sorted(item_list, key=cmp_to_key(cmp_func))
     return item_list
 
@@ -167,8 +167,10 @@ def pack_items_to_boxes(box_list: List[Box],
     item_list += dup_items
             
     #sort items
-    # item_list = sort_items_cha(box_list, item_list, dt)
-    item_list = sorted(item_list, key=cmp_to_key(cmp_item_ah))
+    if len(box_list) == 1:
+        item_list = sort_items_cha(box_list, item_list, dt)
+    else:
+        item_list = sorted(item_list, key=cmp_to_key(cmp_item_ah))
     # item_list = sorted(item_list, key=cmp_to_key(cmp_item_ha))
     used_box:List[Box] = []
     unpacked_items:List[Item] = []
