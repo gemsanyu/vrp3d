@@ -120,7 +120,7 @@ class Box(Item):
         ]
     """
 
-    def insert(self, ep_i: int, item:Item):
+    def insert(self, ep_i: int, item:Item, is_using_rs:bool):
         position = self.ep_list[ep_i].pos
         self.filled_volume += item.volume
         self.weight += item.weight
@@ -165,15 +165,16 @@ class Box(Item):
                 new_eps[4].pos = (position[0], projy , position[2] + item.size[2])
                 max_bound[5] = projy
 
-        # update the new EPs residual space
-        for i, ep in enumerate(new_eps):
-            self.update_ep_to_all_items(new_eps[i])
+        if is_using_rs:
+            # update the new EPs residual space
+            for i, ep in enumerate(new_eps):
+                self.update_ep_to_all_items(new_eps[i])
 
-        # update the old EPs residual space with
-        # regard to the new item
-        for i, ep in enumerate(self.ep_list):
-            for item in self.packed_items:
-                self.ep_list[i].update_res(item.position, item.size)   
+            # update the old EPs residual space with
+            # regard to the new item
+            for i, ep in enumerate(self.ep_list):
+                for item in self.packed_items:
+                    self.ep_list[i].update_res(item.position, item.size)   
 
         # remove inserted position from extreme points
         del self.ep_list[ep_i]
@@ -183,6 +184,9 @@ class Box(Item):
 
         # and remove duplicate extreme points
         self.ep_list = list(set(self.ep_list))
+        if not is_using_rs:
+            self.ep_list = sorted(self.ep_list, key=lambda ep: (ep.pos[2], ep.pos[1], ep.pos[0]))
+
 
     def plot_cube(self, ax, x, y, z, dx, dy, dz, color='red'):
         """ Auxiliary function to plot a cube. code taken somewhere from the web.  """

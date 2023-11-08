@@ -9,6 +9,7 @@ class Item:
         self.weight:float
         self.volume = size[0]*size[1]*size[2]
         self.position = None
+        self.packing_order = 0
         self.alternative_sizes = [
             (size[0], size[1], size[2]),
             (size[0], size[2], size[1]), 
@@ -37,3 +38,6 @@ class Item:
     
     def rotate(self):
         self.rotate_count += 1
+
+    def set_packing_order(self, packing_order):
+        self.set_packing_order = packing_order

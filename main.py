@@ -1,11 +1,11 @@
-from random import randint
+from random import randint, seed
 from uuid import uuid1
 
 from item.box import Box
 from item.medicine import Medicine
 from item.item import Item
 from item.utils import Temperature
-from packing.bfd import bfd
+from packing.packing import pack_items_to_boxes
 
 
 def run():
@@ -21,17 +21,21 @@ def run():
                        weight=randint(10,30),
                        temp_class=Temperature.ROOM)
         med_list += [med]
-    box1 = Box(max_weight=1000, size=(10,10,10))
-    box2 = Box(max_weight=1000, size=(5,4,5))
-    box_list = [box1, box2]
-
-    used_box, unpacked_items = bfd(box_list, med_list, dt=2)
-    used_box[0].visualize_packed_items()
-    used_box[1].visualize_packed_items()
-    print(len(unpacked_items))
+    box_list = []
+    n_box = 10
+    for i in range(n_box):
+        box = Box(max_weight=1000, size=(randint(5,10), randint(5,10), randint(5,10)))
+        box_list += [box]
+    used_box, unpacked_items = pack_items_to_boxes(box_list, med_list, is_best_fit=False)
+    for box in used_box:
+        box.visualize_packed_items()
+    print(len(used_box), len(unpacked_items))
+    # print(len(unpacked_items))
+    # print(med_list, box_list)
     # print(used_box[0].packed_items)
 
 
 
 if __name__ == "__main__":
+    seed(20)
     run()
