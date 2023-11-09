@@ -217,8 +217,40 @@ def pack_items_to_boxes(box_list: List[Box],
     return used_box, list(set(unpacked_items))
 
 
+def add_items_to_box(box:Box, item_list:List[Item])->bool:
+    # duplicate items for each rotation
+    dup_items: List[Item] = []
+    for i, item in enumerate(item_list):
+        item_list[i].rotate_count = 0
+        for r in range(1,6):
+            new_item = deepcopy(item)
+            new_item.rotate_count = r
+            dup_items += [new_item]
+    item_list += dup_items
+    item_list = sorted(item_list, key=cmp_to_key(cmp_item_ah))
 
+    unpacked_items = []
+    while len(item_list) > 0:
+        item = item_list[0]
+        box_i, ep_i = find_best_ep([box], item)
+        if ep_i == -1:
+            unpacked_items += [item]
+            del item_list[0]
+            continue
+
+        # succeeding in inserting
+        box.insert(ep_i, item, is_using_rs=False)
+        # remove the duplicate items, in unpacked items
+        for i in reversed(range(len(unpacked_items))):
+            if unpacked_items[i].id == item.id:
+                del unpacked_items[i]
         
+        for i in reversed(range(len(item_list))):
+            if item_list[i].id == item.id:
+                del item_list[i]
+    if len(unpacked_items)>0:
+        return False
+    return True
 
 
         
