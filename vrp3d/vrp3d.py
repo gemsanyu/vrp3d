@@ -31,4 +31,4 @@ class VRP3D:
         if not solution.is_feasible:
             return 999999999
         weight_cost = sum([vec.weight_cost for vec in solution.vehicle_list])
-        distance_cost = 
+        #distance_cost = 

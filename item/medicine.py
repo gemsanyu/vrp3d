@@ -26,8 +26,8 @@ class Medicine(Item):
         self.product_id = product_id
         self.number = number
         self.uom = uom
-        self.id = order_id+"-"+customer_id+\
-            "-"+product_id+"-"+str(number)
+        self.id = str(order_id)+"-"+str(customer_id)+\
+            "-"+str(product_id)+"-"+str(number)
 
 
 

@@ -1,6 +1,6 @@
 from typing import Tuple, Optional
 
-from vehicle.box import Box
+from item.box import Box
 # from vehicle.utils import TEMP..
 
 WC_COMPUTATION_SHR = 0
