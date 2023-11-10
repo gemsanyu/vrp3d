@@ -12,6 +12,7 @@ from vehicle.vehicle import Vehicle, create_vehicle
 from vns.greedy_init import greedy_initialization
 from vrp3d.solution import Solution
 from vrp3d.vrp3d import VRP3D
+from data.GenerateData import ProblemGenerator
 
 
 
@@ -161,18 +162,26 @@ def generate_vehicles(n_vehicle):
     return vehicle_list
 
 def run():
-    
+    ProblemGenerator.initialize()
+    order_list = ProblemGenerator.generate_random_orders(200, 100, 10)
+    vehicle_list = ProblemGenerator.generate_random_vehicles(10)
+    depot_coord = ProblemGenerator.get_random_depot()
+    '''
     order_list = generate_orders(200, 20)
     vehicle_list = generate_vehicles(10)
     depot_coord = tuple(lat_lon_list[10])
+    '''
     for i, order in enumerate(order_list):
-        cbox_list = generate_cardboard_boxes()
+        #cbox_list = generate_cardboard_boxes()
+        cbox_list = ProblemGenerator.get_random_duses(1000)
         # print(len(order_list[i].item_list))
         order_list[i].pack_items_into_cardboard_boxes(cbox_list)
         # print(len(order_list[i].packed_item_list))
+    #problem = ProblemGenerator.generate_problem(5, 100, 10, 30)
     problem = VRP3D(vehicle_list,
                     order_list,
                     depot_coord)
+                    
     solution = greedy_initialization(problem)
     print(solution.tour_list)
     # solution = 
