@@ -241,10 +241,11 @@ class ProblemGenerator:
         while sum_quantity < max_total_quantity:
             current_quantity = min(max_total_quantity - sum_quantity, random.randint(1, max_each_quantity))
             sum_quantity += current_quantity
-            med = ProblemGenerator.generate_random_medicine(ProblemGenerator.ORDER_COUNTER, customer_id, 1)
+            med = ProblemGenerator.generate_random_medicine(ProblemGenerator.ORDER_COUNTER, customer_id, 0)
             for i in range(current_quantity):
-                items.append(copy.deepcopy(med))
-
+                new_med = copy.deepcopy(med)
+                new_med.number = i
+                items.append(copy.deepcopy(new_med))
         return Order(ProblemGenerator.ORDER_COUNTER, customer_id, items, customer_coords)
 
     def generate_random_orders(number_of_orders, max_each_quantity, max_total_quantity):
