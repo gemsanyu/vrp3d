@@ -1,7 +1,7 @@
 from copy import deepcopy
 from functools import partial, cmp_to_key
 from math import ceil
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 from item.item import Item
 from item.box import Box

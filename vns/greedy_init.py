@@ -42,15 +42,12 @@ def greedy_initialization(problem: VRP3D) -> Solution:
             add_weight_cost = order.weight*vehicle_list[j].cost_per_kg
             add_cost = add_dist_cost + add_weight_cost
             action_list += [InsertionAction(i,j,add_cost)] 
-            print(i,j,add_dist_cost, add_weight_cost)
         action_list = sorted(action_list, key=lambda action: action.cost)
-        print("-----------------------")
 
         # check feasibility
         for action in action_list:
             new_sol = deepcopy(solution)
             is_insertion_feasible = new_sol.append_order(action.order_i, action.vec_i)
-            print(action, is_insertion_feasible)
             # print(is_insertion_feasible)
             if is_insertion_feasible:
                 solution = new_sol

@@ -24,5 +24,7 @@ class Order:
     def pack_items_into_cardboard_boxes(self, box_list:List[Box]):
         item_list = copy(self.item_list)
         used_box, unpacked_items = pack_items_to_boxes(box_list, item_list, is_best_fit=False)
+        for bi, box in enumerate(used_box):
+            used_box[bi].id = self.id+"-"+used_box[bi].id
         self.packed_item_list = used_box + unpacked_items 
         self.num_item_packed = len(self.packed_item_list)

@@ -1,14 +1,15 @@
-import random
+import copy
 import csv
+import random
+from uuid import uuid1
+
 import numpy as np
     
-from vehicle.vehicle import create_vehicle
 from item.box import Box
 from item.medicine import Medicine
 from order.order import Order
+from vehicle.vehicle import create_vehicle
 from vrp3d.vrp3d import VRP3D
-from uuid import uuid1
-import copy
 
 class MasterRelasi:
     Relasi = {}

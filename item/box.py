@@ -1,6 +1,6 @@
-from collections import deque
-from enum import Enum
+from copy import copy
 from typing import List, Tuple, Optional
+from uuid import uuid1
 
 import matplotlib.pyplot as plt
 
@@ -52,6 +52,7 @@ class Box(Item):
                  support_alpha:float=0.51,
                  temperature:int= 0):
         super(Box, self).__init__(size)
+        self.id = str(uuid1())
         self.max_weight = max_weight
         self.support_alpha = support_alpha
         self.packed_items: List[Item] = []
@@ -60,20 +61,30 @@ class Box(Item):
         self.temperature = temperature
         self.ep_list: List[EP] = []
 
-    def reset(self):
-        self.filled_volume = 0
-        self.weight = 0
-        self.packed_items = []
-        self.init_extreme_points()
+    # reset to initial state
+    # or to a given value (say a state of a solution)
+    def reset(self,
+              packed_items: Optional[List[Item]] = None,
+              ep_list: Optional[List[EP]] = None):
+        if packed_items is None:
+            self.filled_volume = 0
+            self.weight = 0
+            self.packed_items = []
+        else:
+            self.packed_items = packed_items
+            self.weight = sum([p_item.weight for p_item in packed_items])
+            self.filled_volume = sum([p_item.volume for p_item in packed_items])
+        self.init_extreme_points(ep_list)
 
-    def init_extreme_points(self):
-        self.ep_list = [EP((0,0,0),self.size)]
+    def init_extreme_points(self, ep_list: Optional[List[EP]] = None):
+        if ep_list is None:
+            self.ep_list = [EP((0,0,0),self.size)]
+        else:
+            self.ep_list = copy(ep_list)
 
     def update_ep_to_all_items(self, ep:EP):
         for item in self.packed_items:
             ep.update_res(item.position, item.size)
-
-    
 
     """ FEASIBLE IFF
         1. placement does not cause item overflows edges
@@ -119,7 +130,6 @@ class Box(Item):
             (ep_zy)
         ]
     """
-
     def insert(self, ep_i: int, item:Item, is_using_rs:bool):
         position = self.ep_list[ep_i].pos
         self.filled_volume += item.volume

@@ -1,10 +1,12 @@
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Dict
 
 import numpy as np
 from sklearn.metrics.pairwise import haversine_distances
 
+from item.item import Item
 from order.order import Order
 from vehicle.vehicle import Vehicle
+from vrp3d.solution import Solution
 
 
 class VRP3D:
@@ -32,8 +34,22 @@ class VRP3D:
             self.distance_matrix = haversine_distances(self.coords).astype(float) * 6371000/1000 #earth's radius in KM
         self.velocity = velocity
         self.driving_duration_matrix = self.distance_matrix/velocity
+        self.item_dict: Dict[str, Item] = {}
+        for order in order_list:
+            for item in order.packed_item_list:
+                self.item_dict[item.id] = item
 
+    # """
+    #     reset the objects to its initial state,
+    #     or to the state of a solution
+    # """
+    # def reset(self, solution:Optional[Solution]=None):
+    #     for i, vec in enumerate(self.vehicle_list):
+    #         tour_list = solution.tour_list[i]
+    #         packed_items = []
+    #         self.vehicle_list[i].box.reset(
 
+    #         )
     # def compute_cost(self, solution:Solution):
     #     if not solution.is_feasible:
     #         return 999999999

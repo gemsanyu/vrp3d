@@ -17,3 +17,6 @@ from vrp3d.vrp3d import VRP3D
 """
 def saving(problem: VRP3D) -> Solution:
     solution = greedy_initialization(problem)    
+    is_good_merge_exist = True
+    while(is_good_merge_exist):
+        break
