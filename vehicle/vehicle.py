@@ -40,8 +40,9 @@ class Vehicle:
         self.box.reset()
 
     # TODO: create multiple types of weight cost computation
-    def compute_weight_cost(self, total_weight:float):
-        return total_weight*self.cost_per_kg
+    def compute_weight_cost(self):
+        return self.box.weight*self.cost_per_kg
+        # return total_weight*self.cost_per_kg
 
 
 def create_vehicle(vendor: str,

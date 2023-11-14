@@ -1,6 +1,10 @@
 from enum import Enum
 from typing import Tuple
 
+from numba.core.types.containers import UniTuple
+from numba import int32, boolean
+import numba as nb
+
 from item.item import Item
 
 class Temperature(Enum):
@@ -9,9 +13,11 @@ class Temperature(Enum):
     CHILL_HIGH = 2
     ROOM = 3
 
+@nb.njit(boolean(int32,int32,int32,int32),cache=True)
 def is_overlapping_1d(x1:int,dx1:int,x2:int,dx2:int):
     return x1 + dx1 >= x2 and x1 < x2 + dx2
 
+@nb.njit(boolean(UniTuple(int32,3),UniTuple(int32,3),UniTuple(int32,3),UniTuple(int32,3)), cache=True)
 def is_overlapping_3d(pos1:Tuple[int,int,int], 
                      size1:Tuple[int,int,int], 
                      pos2:Tuple[int,int,int], 
@@ -20,11 +26,13 @@ def is_overlapping_3d(pos1:Tuple[int,int,int],
         is_overlapping_1d(pos1[1], size1[1], pos2[1], size2[1]) and \
         is_overlapping_1d(pos1[2], size1[2], pos2[2], size2[2])
 
+@nb.njit(int32(int32,int32,int32,int32),cache=True)
 def compute_overlap_1d(x1:int,dx1:int,x2:int,dx2:int):
     a = max(x1,x2)
     b = min(x1+dx1,x2+dx2)
     return max(b-a,0)
 
+@nb.njit(int32(UniTuple(int32,3),UniTuple(int32,3),UniTuple(int32,3),UniTuple(int32,3)),cache=True)
 def compute_supported_area(top_pos:Tuple[int,int,int], 
                            top_size:Tuple[int,int,int], 
                            bot_pos:Tuple[int,int,int], 

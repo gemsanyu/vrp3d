@@ -217,7 +217,7 @@ def pack_items_to_boxes(box_list: List[Box],
     return used_box, list(set(unpacked_items))
 
 
-def add_items_to_box(box:Box, item_list:List[Item])->bool:
+def add_items_to_box(box:Box, item_list:List[Item])->Tuple[bool, Dict[str, Tuple[int,int,int]]]:
     # duplicate items for each rotation
     dup_items: List[Item] = []
     for i, item in enumerate(item_list):
@@ -228,11 +228,13 @@ def add_items_to_box(box:Box, item_list:List[Item])->bool:
             dup_items += [new_item]
     item_list += dup_items
     item_list = sorted(item_list, key=cmp_to_key(cmp_item_ah))
+    packed_item_list = []
+    position_dict = {}
 
     unpacked_items = []
     while len(item_list) > 0:
         item = item_list[0]
-        box_i, ep_i = find_best_ep([box], item)
+        box_i, ep_i = find_first_ep([box], item)
         if ep_i == -1:
             unpacked_items += [item]
             del item_list[0]
@@ -240,6 +242,8 @@ def add_items_to_box(box:Box, item_list:List[Item])->bool:
 
         # succeeding in inserting
         box.insert(ep_i, item, is_using_rs=False)
+        packed_item_list += [item]
+        position_dict[item.id] = item.position
         # remove the duplicate items, in unpacked items
         for i in reversed(range(len(unpacked_items))):
             if unpacked_items[i].id == item.id:
@@ -248,9 +252,11 @@ def add_items_to_box(box:Box, item_list:List[Item])->bool:
         for i in reversed(range(len(item_list))):
             if item_list[i].id == item.id:
                 del item_list[i]
+    
     if len(unpacked_items)>0:
-        return False
-    return True
+        return False, None
+
+    return True, position_dict
 
 
         

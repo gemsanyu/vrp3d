@@ -4,7 +4,6 @@ from typing import Tuple
 class Item:
     def __init__(self,
                  size:Tuple[int,int,int]):
-        self.id = str(uuid1())
         self.original_size = size
         self.weight:float
         self.volume = size[0]*size[1]*size[2]

@@ -28,7 +28,7 @@ class Medicine(Item):
         self.uom = uom
 
     @property
-    def id(self):
+    def id(self)->str:
         return self.order_id+"-"+self.customer_id+\
             "-"+self.product_id+"-"+str(self.number)
 

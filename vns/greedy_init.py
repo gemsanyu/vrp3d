@@ -1,6 +1,7 @@
-from copy import deepcopy
+from copy import copy,deepcopy
 from typing import NamedTuple, List
 
+from vns.utils import append_order, get_new_arrival_time
 from vrp3d.solution import Solution
 from vrp3d.vrp3d import VRP3D
 
@@ -24,7 +25,7 @@ class InsertionAction(NamedTuple):
         to the next order
 """
 def greedy_initialization(problem: VRP3D) -> Solution:
-    solution = Solution(problem)
+    solution = Solution(problem.num_vehicle, problem.num_order)
     order_list = problem.order_list
     vehicle_list = problem.vehicle_list
     dist_mat = problem.distance_matrix
@@ -47,9 +48,21 @@ def greedy_initialization(problem: VRP3D) -> Solution:
         # check feasibility
         for action in action_list:
             new_sol = deepcopy(solution)
-            is_insertion_feasible = new_sol.append_order(action.order_i, action.vec_i)
-            # print(is_insertion_feasible)
+            problem.reset(new_sol)
+            arrival_time_to_order, is_fit_duration = get_new_arrival_time(action.order_i, action.vec_i, problem, solution.tour_list[action.vec_i], solution.arrival_time_list[action.vec_i])
+            if not is_fit_duration:
+                continue
+            is_insertion_feasible, position_dict = append_order(action.order_i, action.vec_i, problem)
             if is_insertion_feasible:
+                new_sol.tour_list[action.vec_i] += [action.order_i]
+                new_sol.arrival_time_list[action.vec_i] += [arrival_time_to_order]
+                order = problem.order_list[action.order_i]
+                for j in range(order.num_item_packed):
+                    item = order.packed_item_list[j]
+                    item.position = position_dict[item.id]
+                order_packing_position = [order.packed_item_list[j].position for j in range(order.num_item_packed)]
+                new_sol.packing_position_list[action.order_i] = order_packing_position
+                new_sol.ep_list[action.vec_i] = copy(problem.vehicle_list[action.vec_i].box.ep_list)
                 solution = new_sol
                 break
     return solution

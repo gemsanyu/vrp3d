@@ -1,5 +1,5 @@
-from copy import deepcopy, copy
-from typing import Tuple, List
+from copy import copy
+from typing import Tuple, List, Optional
 
 from item.box import Box
 from item.item import Item
@@ -18,7 +18,7 @@ class Order:
         self.coord = coord
         self.vehicle = None
         self.customer_id = customer_id
-        self.id = id
+        self.id = str(id)
         self.weight = sum([item.weight for item in self.item_list])
 
     def pack_items_into_cardboard_boxes(self, box_list:List[Box]):
@@ -28,3 +28,11 @@ class Order:
             used_box[bi].id = self.id+"-"+used_box[bi].id
         self.packed_item_list = used_box + unpacked_items 
         self.num_item_packed = len(self.packed_item_list)
+
+    def reset(self, position_list: Optional[List[Tuple[int,int,int]]]=None):
+        if position_list:
+            for i, item in enumerate(self.packed_item_list):
+                self.packed_item_list[i].position = position_list[i]
+        else:
+            for i, item in enumerate(self.packed_item_list):
+                self.packed_item_list[i].position = None

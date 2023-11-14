@@ -1,3 +1,4 @@
+from itertools import chain
 from typing import List, Tuple, Optional, Dict
 
 import numpy as np
@@ -7,6 +8,7 @@ from item.item import Item
 from order.order import Order
 from vehicle.vehicle import Vehicle
 from vrp3d.solution import Solution
+from vrp3d.utils import compute_tour_list_length
 
 
 class VRP3D:
@@ -31,27 +33,36 @@ class VRP3D:
         if distance_matrix is not None:
             self.distance_matrix = np.asanyarray(distance_matrix,dtype=float)
         else:
-            self.distance_matrix = haversine_distances(self.coords).astype(float) * 6371000/1000 #earth's radius in KM
+            self.distance_matrix = haversine_distances(np.radians(self.coords)).astype(float) * 6371000/1000 #earth's radius in KM
+        print(self.distance_matrix)
         self.velocity = velocity
         self.driving_duration_matrix = self.distance_matrix/velocity
-        self.item_dict: Dict[str, Item] = {}
-        for order in order_list:
-            for item in order.packed_item_list:
-                self.item_dict[item.id] = item
+        self.weight_cost_list: List[float] = [0]*self.num_vehicle
+        self.distance_cost_list: List[float] = [0]*self.num_vehicle
 
-    # """
-    #     reset the objects to its initial state,
-    #     or to the state of a solution
-    # """
-    # def reset(self, solution:Optional[Solution]=None):
-    #     for i, vec in enumerate(self.vehicle_list):
-    #         tour_list = solution.tour_list[i]
-    #         packed_items = []
-    #         self.vehicle_list[i].box.reset(
+    """
+        reset the objects to its initial state,
+        or to the state of a solution
+    """
+    def reset(self, solution:Optional[Solution]=None):
+        if solution is None:
+            self.weight_cost_list: List[float] = [0]*self.num_vehicle
+            self.distance_cost_list: List[float] = [0]*self.num_vehicle
+            for i, vec in enumerate(self.vehicle_list):
+                self.vehicle_list[i].box.reset()
+            for i, order in enumerate(self.order_list):
+                self.order_list[i].reset()
+            return
+        
+        for i, order in enumerate(self.order_list):
+            self.order_list[i].reset(solution.packing_position_list[i])
+        dist_mat = self.distance_matrix
+        for i, vec in enumerate(self.vehicle_list):
+            packed_items = [self.order_list[oi].packed_item_list for oi in solution.tour_list[i]]
+            packed_items = list(chain.from_iterable(packed_items))
+            self.vehicle_list[i].box.reset(packed_items, solution.ep_list[i])
 
-    #         )
-    # def compute_cost(self, solution:Solution):
-    #     if not solution.is_feasible:
-    #         return 999999999
-    #     weight_cost = sum([vec.weight_cost for vec in solution.vehicle_list])
-    #     distance_cost = 
+            self.weight_cost_list[i] = self.vehicle_list[i].compute_weight_cost()
+            self.distance_cost_list = compute_tour_list_length(self.distance_matrix, solution.tour_list)
+
+        

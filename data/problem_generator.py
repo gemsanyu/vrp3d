@@ -20,6 +20,7 @@ class MasterRelasi:
             for i in temp:
                 MasterRelasi.Relasi[i[1]] = ({
                     "Kode Cabang" : i[0],
+                    "Customer Number": i[1],
                     "Alamat" : i[2],
                     "Latitude" : i[3],
                     "Longitude" : i[4],
@@ -45,8 +46,10 @@ class MasterRelasi:
     def get_relasi(customer_number):
         return MasterRelasi.Relasi[customer_number]
     
-    def get_random_customer():
-        return random.choice(list(MasterRelasi.Relasi.items()))
+    def get_random_customer(kode_cabang):
+        customers = list(MasterRelasi.Relasi.values())
+        customers_of_depot = [cust for cust in customers if cust["Kode Cabang"] ==kode_cabang]
+        return random.choice(customers_of_depot)
 
 
 class MasterCabang:
@@ -204,8 +207,11 @@ class ProblemGenerator:
         return random.randint(0, len(MapData.DepotIndices) - 1)
     
     def get_random_depot():
-        return MapData.Vertices[ProblemGenerator.get_random_depot_index()]
-
+        depots = list(MasterCabang.Cabang.values())
+        depot = depots[ProblemGenerator.get_random_depot_index()]
+        coord = [depot["Latitude"], depot["Longitude"]]
+        kode_cabang = depot["Kode Cabang"]
+        return kode_cabang, coord
 
 
     def generate_random_medicine_nocus():
@@ -232,12 +238,13 @@ class ProblemGenerator:
         return [ProblemGenerator.generate_random_medicine(order_id, customer_id, number) for i in range(number_of_medicines)]
 
 
-    def generate_random_order(max_each_quantity, max_total_quantity):
-        customer = MasterRelasi.get_random_customer()
-        customer_id = customer[0]
-        customer_coords = (float(customer[1]["Latitude"]), float(customer[1]["Longitude"]))
+    def generate_random_order(max_each_quantity, max_total_quantity, kode_cabang):
+        customer = MasterRelasi.get_random_customer(kode_cabang)
+        customer_id = customer["Customer Number"]
+        customer_coords = (float(customer["Latitude"]), float(customer["Longitude"]))
         items = []
         sum_quantity = 0
+        ProblemGenerator.ORDER_COUNTER += 1
         while sum_quantity < max_total_quantity:
             current_quantity = min(max_total_quantity - sum_quantity, random.randint(1, max_each_quantity))
             sum_quantity += current_quantity
@@ -248,8 +255,8 @@ class ProblemGenerator:
                 items.append(copy.deepcopy(new_med))
         return Order(ProblemGenerator.ORDER_COUNTER, customer_id, items, customer_coords)
 
-    def generate_random_orders(number_of_orders, max_each_quantity, max_total_quantity):
-        return [ProblemGenerator.generate_random_order(max_each_quantity, max_total_quantity) for i in range(number_of_orders)]
+    def generate_random_orders(number_of_orders, max_each_quantity, max_total_quantity, kode_cabang):
+        return [ProblemGenerator.generate_random_order(max_each_quantity, max_total_quantity, kode_cabang) for i in range(number_of_orders)]
 
     def generate_random_vehicle():
         temp = MasterKendaraan.get_random_vehicle()[1]

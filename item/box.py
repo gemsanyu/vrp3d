@@ -71,7 +71,7 @@ class Box(Item):
             self.weight = 0
             self.packed_items = []
         else:
-            self.packed_items = packed_items
+            self.packed_items = copy(packed_items)
             self.weight = sum([p_item.weight for p_item in packed_items])
             self.filled_volume = sum([p_item.volume for p_item in packed_items])
         self.init_extreme_points(ep_list)
