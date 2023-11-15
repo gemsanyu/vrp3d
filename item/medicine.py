@@ -1,6 +1,8 @@
 import enum
 from typing import Tuple
 
+import numpy as np
+
 from item.item import Item
 
 """
@@ -15,7 +17,7 @@ class Medicine(Item):
                  product_id:str,
                  number:int,
                  uom: str, 
-                 size:Tuple[int,int,int], 
+                 size:np.ndarray, 
                  weight:int,
                  temp_class:int):
         super(Medicine, self).__init__(size)

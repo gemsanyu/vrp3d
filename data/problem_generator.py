@@ -232,7 +232,8 @@ class ProblemGenerator:
             size0 = int(float(med["Panjang Cm"].replace(',', '')))
             size1 = int(float(med["Lebar Cm"].replace(',', '')))
             size2 = int(float(med["Tinggi Cm"].replace(',', '')))
-        return Medicine(str(order_id), str(customer_id), str(medp[0]), number, med["UOM"], (size0, size1, size2), int(float(med["Berat Gram"].replace(',', ''))), TEMP_CLASS[med["Kategori Pengiriman"]])
+        size = np.asanyarray([size0,size1,size2], dtype=np.int64)
+        return Medicine(str(order_id), str(customer_id), str(medp[0]), number, med["UOM"], size, int(float(med["Berat Gram"].replace(',', ''))), TEMP_CLASS[med["Kategori Pengiriman"]])
     
     def generate_random_medicines(number_of_medicines, order_id, customer_id, number):
         return [ProblemGenerator.generate_random_medicine(order_id, customer_id, number) for i in range(number_of_medicines)]
@@ -260,7 +261,9 @@ class ProblemGenerator:
 
     def generate_random_vehicle():
         temp = MasterKendaraan.get_random_vehicle()[1]
-        return create_vehicle(temp["Vendor"], (int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))), int(float(temp["Max Berat Gram"])), int(float(temp["Cost Per KM"])), int(float(temp["Cost Per KG"])), TEMP_CLASS[temp["Kategori Pengiriman"]], int(float(temp["Max Duration"])))
+        size0, size1, size2 = int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))
+        size = np.asanyarray([size0,size1,size2], dtype=np.int64)
+        return create_vehicle(temp["Vendor"], size, int(float(temp["Max Berat Gram"])), int(float(temp["Cost Per KM"])), int(float(temp["Cost Per KG"])), TEMP_CLASS[temp["Kategori Pengiriman"]], int(float(temp["Max Duration"])))
 
 
     def generate_random_vehicles(number_of_vehicles):
@@ -268,7 +271,9 @@ class ProblemGenerator:
     
     def get_random_dus():
         temp = random.choice(list(MasterDus.Dus.items()))[1]
-        return Box((int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))), int(float(temp["Max Berat Gram"])))
+        size0,size1,size2 = int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))
+        size = np.asanyarray([size0,size1,size2], dtype=np.int64)
+        return Box(size, int(float(temp["Max Berat Gram"])))
     
     def get_random_duses(number_of_duses):
         return [ProblemGenerator.get_random_dus() for i in range(number_of_duses)]

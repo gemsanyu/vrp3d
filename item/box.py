@@ -3,51 +3,16 @@ from typing import List, Tuple, Optional
 from uuid import uuid1
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from item.item import Item
 from item.utils import is_overlapping_3d, compute_supported_area
 from item.utils import is_projection_valid_xy, is_projection_valid_xz, is_projection_valid_yx, is_projection_valid_yz, is_projection_valid_zx, is_projection_valid_zy
 from item.utils import is_overlap_any_packed_items
 
-"""
-    extreme_points: possible insertion position, based on extreme-point based heuristic    
-    we gonna use the Residual Space merit function here
-    self.res is similar to size actually,
-    the span to each axis, not overlapping with any item
-    or, the distance in each axis to the closest item
-"""
-class EP:
-    def __init__(self,
-                 pos: Tuple[int,int,int],
-                 res: Optional[Tuple[int,int,int]]=None) -> None:
-        self.pos = pos
-        self.res: Tuple[int, int, int] = res
-
-    def update_res(self, item_pos:Tuple[int,int,int], item_size:Tuple[int,int,int]):
-        if not is_overlapping_3d(self.pos, self.res, item_pos, item_size):
-            return
-        new_res = list(self.res)
-        for i in range(3):
-            if self.pos[i] < item_pos[i]:
-                new_res[i] = min(self.res[i], item_pos[i]-self.pos[i])
-        self.res = tuple(new_res)
-
-    def compute_merit(self, item_size:Tuple[int,int,int]):
-        return sum([self.res[i]-item_size[i] for i in range(3)])
-    
-    # these we need so that we can put EPs into a set, to remove
-    # duplicates
-    def __hash__(self) -> int:
-        return hash(self.pos)
-    
-    def __eq__(self, other) -> bool:
-        return self.pos == other.pos
-        
-
-
 class Box(Item):
     def __init__(self, 
-                 size: Tuple[int,int,int], 
+                 size: np.ndarray, 
                  max_weight:int,
                  support_alpha:float=0.51,
                  temperature:int= 0):
@@ -59,13 +24,13 @@ class Box(Item):
         self.weight = 0
         self.filled_volume = 0
         self.temperature = temperature
-        self.ep_list: List[EP] = []
+        self.ep_list: np.ndarray = None
 
     # reset to initial state
     # or to a given value (say a state of a solution)
     def reset(self,
               packed_items: Optional[List[Item]] = None,
-              ep_list: Optional[List[EP]] = None):
+              ep_list: np.ndarray = None):
         if packed_items is None:
             self.filled_volume = 0
             self.weight = 0
@@ -76,26 +41,23 @@ class Box(Item):
             self.filled_volume = sum([p_item.volume for p_item in packed_items])
         self.init_extreme_points(ep_list)
 
-    def init_extreme_points(self, ep_list: Optional[List[EP]] = None):
+    def init_extreme_points(self, ep_list: np.ndarray = None):
         if ep_list is None:
-            self.ep_list = [EP((0,0,0),self.size)]
+            self.ep_list = np.zeros((1,3), dtype=np.int64)
         else:
-            self.ep_list = copy(ep_list)
-
-    def update_ep_to_all_items(self, ep:EP):
-        for item in self.packed_items:
-            ep.update_res(item.position, item.size)
+            self.ep_list = np.copy(ep_list)
 
     """ FEASIBLE IFF
         1. placement does not cause item overflows edges
         2. it does not overlap other boxes
         3. alpha% of its bottom area are supported by other boxes or 
     """
-    @profile
-    def is_insert_feasible(self, position:Tuple[int,int,int], item:Item) -> bool:
-        is_overflow = position[0] + item.size[0] > self.size[0] or \
-            position[1] + item.size[1] > self.size[1] or \
-            position[2] + item.size[2] > self.size[2]
+    def is_insert_feasible(self, position:np.ndarray, item:Item) -> bool:
+        # is_overflow = position[0] + item.size[0] > self.size[0] or \
+        #     position[1] + item.size[1] > self.size[1] or \
+        #     position[2] + item.size[2] > self.size[2]
+        is_overflow = position + item.size > self.size
+        is_overflow = np.any(is_overflow)
         if is_overflow:
             return False
         
@@ -119,7 +81,7 @@ class Box(Item):
         supported_ratio = total_supported_area/item.face_area
         return supported_ratio >= self.support_alpha
     
-    def is_item_fit(self, item: Item):
+    def is_item_fit(self, item: Item):  
         return self.filled_volume + item.volume <= self.volume and \
             self.weight + item.weight <= self.max_weight
     
@@ -142,16 +104,15 @@ class Box(Item):
 
         # now generate extreme points
         # 1. initial extreme points
-        npos_list = [
-            (position[0], position[1] + item.size[1], position[2]),
-            (position[0], position[1] + item.size[1], position[2]),
-            (position[0] + item.size[0], position[1], position[2]),
-            (position[0] + item.size[0], position[1], position[2]),
-            (position[0], position[1], position[2] + item.size[2]),
-            (position[0], position[1], position[2] + item.size[2]),
+        new_eps = [
+            [position[0], position[1] + item.size[1], position[2]],
+            [position[0], position[1] + item.size[1], position[2]],
+            [position[0] + item.size[0], position[1], position[2]],
+            [position[0] + item.size[0], position[1], position[2]],
+            [position[0], position[1], position[2] + item.size[2]],
+            [position[0], position[1], position[2] + item.size[2]],
         ]
-        res_list = [tuple(self.size[j]-npos_list[i][j] for j in range(3)) for i in range(6)]
-        new_eps = [EP(npos_list[i], res_list[i]) for i in range(6)]
+        new_eps = np.asanyarray(new_eps, dtype=np.int64)
         max_bound = [-1,-1,-1,-1,-1,-1]
 
         # 2. project these points 
@@ -160,45 +121,34 @@ class Box(Item):
             projy = p_item.position[1]+p_item.size[1]
             projz = p_item.position[2]+p_item.size[2]
             if is_projection_valid_yx(item, p_item) and projx > max_bound[0]:
-                new_eps[0].pos = (projx, position[1] + item.size[1], position[2])
+                new_eps[0,:] = np.asanyarray([projx, position[1] + item.size[1], position[2]])
                 max_bound[0] = projx
             if is_projection_valid_yz(item, p_item) and projz > max_bound[1]:
-                new_eps[1].pos = (position[1], position[1] + item.size[1], projz)
+                new_eps[1,:] = np.asanyarray([position[1], position[1] + item.size[1], projz])
                 max_bound[1] = projz
             if is_projection_valid_xy(item, p_item) and projy > max_bound[2]:
-                new_eps[2].pos = (position[0] + item.size[0], projy, position[2])
+                new_eps[2,:] = np.asanyarray([position[0] + item.size[0], projy, position[2]])
                 max_bound[2] = projy
             if is_projection_valid_xz(item, p_item) and projz > max_bound[3]:
-                new_eps[3].pos = (position[0] + item.size[0], position[1], projz)
+                new_eps[3,:] = np.asanyarray([position[0] + item.size[0], position[1], projz])
                 max_bound[3] = projz
             if is_projection_valid_zx(item, p_item) and projz > max_bound[4]:
-                new_eps[3].pos = (projx, position[1], position[2] + item.size[2])
+                new_eps[4,:] = np.asanyarray([projx, position[1], position[2] + item.size[2]])
                 max_bound[4] = projx
             if is_projection_valid_zy(item, p_item) and projy > max_bound[5]:
-                new_eps[4].pos = (position[0], projy , position[2] + item.size[2])
+                new_eps[5,:] = np.asanyarray([position[0], projy , position[2] + item.size[2]])
                 max_bound[5] = projy
 
-        if is_using_rs:
-            # update the new EPs residual space
-            for i, ep in enumerate(new_eps):
-                self.update_ep_to_all_items(new_eps[i])
-
-            # update the old EPs residual space with
-            # regard to the new item
-            for i, ep in enumerate(self.ep_list):
-                for item in self.packed_items:
-                    self.ep_list[i].update_res(item.position, item.size)   
-
         # remove inserted position from extreme points
-        del self.ep_list[ep_i]
+        self.ep_list = np.delete(self.ep_list, [ep_i], axis=0)
 
         # add new EPs to EPlist
-        self.ep_list += new_eps    
+        self.ep_list = np.concatenate([self.ep_list, new_eps], axis=0)
 
         # and remove duplicate extreme points
-        self.ep_list = list(set(self.ep_list))
-        if not is_using_rs:
-            self.ep_list = sorted(self.ep_list, key=lambda ep: (ep.pos[2], ep.pos[1], ep.pos[0]))
+        self.ep_list = np.unique(self.ep_list, axis=0)
+        sorted_idx = np.lexsort((self.ep_list[:,2],self.ep_list[:,1],self.ep_list[:,0]), axis=0)
+        self.ep_list = self.ep_list[sorted_idx]
 
 
     def plot_cube(self, ax, x, y, z, dx, dy, dz, color='red'):
@@ -230,48 +180,3 @@ class Box(Item):
                      color=color)
             counter = counter + 1  
         plt.show()   
-
-
- # def pack_to_box(self, 
-    #   items: List[Box], 
-    #   is_order_strict=True, 
-    #   ep_sorting_method=EP_SORT_ZYX,
-    #   ) -> List[Item]:
-    #     not_packed_items = []
-    #     if not is_order_strict:
-    #         items = sorted(items)
-    #         # items = sorted(items, key=lambda item: (item.size[2], item.size[0], item.size[1]))
-    #     items_deq = deque(items)
-    #     while len(items_deq) > 0:
-    #         # print(len(items_deq))
-    #         item = items_deq.popleft()
-    #         if not self.is_item_fit(item):
-    #             not_packed_items += [item]
-    #             continue
-
-    #         if ep_sorting_method == EP_SORT_ZXY:
-    #             self.ep_list = sorted(self.ep_list, key=lambda ep: (ep[2], ep[0], ep[1]))        
-    #         elif ep_sorting_method == EP_SORT_ZYX:
-    #             self.ep_list = sorted(self.ep_list, key=lambda ep: (ep[2], ep[1], ep[0]))       
-
-    #         is_inserted = False
-    #         # print("------------------")
-    #         # print(item.size)
-    #         for ep in self.ep_list:
-    #             # print(ep)
-    #             if not self.is_insert_feasible(ep, item):
-    #                 continue
-    #             self.insert(ep, item)
-    #             is_inserted = True
-    #             self.visualize_packed_items()
-    #             break
-
-    #         if not is_inserted:
-    #             if item.rotate_count == 5:
-    #                 item.rotate_count = 0
-    #                 not_packed_items += [item]
-    #             else:
-    #                 item.rotate()
-    #                 items_deq.appendleft(item)
-
-    #     return not_packed_items

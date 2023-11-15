@@ -1,7 +1,6 @@
 from typing import List, Tuple
 
-from item.box import EP 
-
+import numpy as np
 """
     tour_list: tour of each vehicle
     packing_position_list: for each order, there are items (meds+dus),
@@ -24,7 +23,7 @@ class Solution:
         self.num_order = num_order
         self.tour_list: List[List[int]] = [[] for _ in range(num_vehicle)]
         self.packing_position_list: List[List[Tuple[int,int,int]]] = [[] for _ in range(num_order)]
-        self.ep_list: List[List[EP]] = [[EP((0,0,0))] for _ in range(num_vehicle)]
+        self.ep_list: List[np.ndarray] = [[np.zeros((3,), dtype=np.int64)] for _ in range(num_vehicle)]
         self.arrival_time_list: List[List[int]] = [[] for _ in range(num_vehicle)]
         
     

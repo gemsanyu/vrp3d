@@ -1,5 +1,7 @@
 from typing import Tuple, List
 
+import numpy as np
+
 from item.box import Box
 from item.utils import Temperature
 
@@ -46,7 +48,7 @@ class Vehicle:
 
 
 def create_vehicle(vendor: str,
-                    box_size: Tuple[int,int,int], 
+                    box_size: np.ndarray, 
                     box_max_weight:int,
                     cost_per_km: int,
                     cost_per_kg: int,

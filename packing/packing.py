@@ -216,7 +216,6 @@ def pack_items_to_boxes(box_list: List[Box],
         # used_box[box_i].visualize_packed_items()
     return used_box, list(set(unpacked_items))
 
-@profile
 def add_items_to_box(box:Box, item_list:List[Item])->Tuple[bool, Dict[str, Tuple[int,int,int]]]:
     # duplicate items for each rotation
     dup_items: List[Item] = []

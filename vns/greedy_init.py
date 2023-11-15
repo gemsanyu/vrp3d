@@ -24,7 +24,6 @@ class InsertionAction(NamedTuple):
         the first feasible (must also be cheapest) is chosen, then continue
         to the next order
 """
-@profile
 def greedy_initialization(problem: VRP3D) -> Solution:
     solution = Solution(problem.num_vehicle, problem.num_order)
     order_list = problem.order_list

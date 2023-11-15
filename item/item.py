@@ -1,22 +1,22 @@
-from uuid import uuid1
-from typing import Tuple
+import numpy as np
 
 class Item:
     def __init__(self,
-                 size:Tuple[int,int,int]):
+                 size:np.ndarray):
         self.original_size = size
         self.weight:float
-        self.volume = size[0]*size[1]*size[2]
+        self.volume = np.prod(size)
         self.position = None
         self.packing_order = 0
         self.alternative_sizes = [
-            (size[0], size[1], size[2]),
-            (size[0], size[2], size[1]), 
-            (size[1], size[0], size[2]),
-            (size[1], size[2], size[0]),
-            (size[2], size[0], size[1]),
-            (size[2], size[1], size[0]),
+            [size[0], size[1], size[2]],
+            [size[0], size[2], size[1]], 
+            [size[1], size[0], size[2]],
+            [size[1], size[2], size[0]],
+            [size[2], size[0], size[1]],
+            [size[2], size[1], size[0]],
         ]
+        self.alternative_sizes = np.asanyarray(self.alternative_sizes, dtype=np.int64)
         # self.alternative_sizes = sorted(self.alternative_sizes, key=lambda sz: (-sz[2],-sz[0],sz[1]))
         self.rotate_count = 0
     
