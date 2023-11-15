@@ -34,7 +34,6 @@ class VRP3D:
             self.distance_matrix = np.asanyarray(distance_matrix,dtype=float)
         else:
             self.distance_matrix = haversine_distances(np.radians(self.coords)).astype(float) * 6371000/1000 #earth's radius in KM
-        print(self.distance_matrix)
         self.velocity = velocity
         self.driving_duration_matrix = self.distance_matrix/velocity
         self.weight_cost_list: List[float] = [0]*self.num_vehicle

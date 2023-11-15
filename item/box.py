@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from item.item import Item
 from item.utils import is_overlapping_3d, compute_supported_area
 from item.utils import is_projection_valid_xy, is_projection_valid_xz, is_projection_valid_yx, is_projection_valid_yz, is_projection_valid_zx, is_projection_valid_zy
-
+from item.utils import is_overlap_any_packed_items
 
 """
     extreme_points: possible insertion position, based on extreme-point based heuristic    
@@ -91,6 +91,7 @@ class Box(Item):
         2. it does not overlap other boxes
         3. alpha% of its bottom area are supported by other boxes or 
     """
+    @profile
     def is_insert_feasible(self, position:Tuple[int,int,int], item:Item) -> bool:
         is_overflow = position[0] + item.size[0] > self.size[0] or \
             position[1] + item.size[1] > self.size[1] or \
@@ -98,9 +99,11 @@ class Box(Item):
         if is_overflow:
             return False
         
-        for p_item in self.packed_items:
-            if is_overlapping_3d(position, item.size, p_item.position, p_item.size):
-                return False
+        if is_overlap_any_packed_items(position, item.size, self.packed_items):
+            return False
+        # for p_item in self.packed_items:
+        #     if is_overlapping_3d(position, item.size, p_item.position, p_item.size):
+        #         return False
 
         is_item_at_bottom = position[2] == 0
         if is_item_at_bottom:

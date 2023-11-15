@@ -24,12 +24,14 @@ class InsertionAction(NamedTuple):
         the first feasible (must also be cheapest) is chosen, then continue
         to the next order
 """
+@profile
 def greedy_initialization(problem: VRP3D) -> Solution:
     solution = Solution(problem.num_vehicle, problem.num_order)
     order_list = problem.order_list
     vehicle_list = problem.vehicle_list
     dist_mat = problem.distance_matrix
     for i, order in enumerate(order_list):
+        print(i)
         node_idx = i+1
         action_list: List[InsertionAction] = []        
         for j in range(problem.num_vehicle):    

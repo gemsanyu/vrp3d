@@ -8,14 +8,12 @@ def run():
     ProblemGenerator.initialize()
     kode_cabang, depot_coord = ProblemGenerator.get_random_depot()
     order_list = ProblemGenerator.generate_random_orders(50, 5, 10, kode_cabang)
-    vehicle_list = ProblemGenerator.generate_random_vehicles(3)
+    vehicle_list = ProblemGenerator.generate_random_vehicles(10)
     
     
     for i, order in enumerate(order_list):
         cbox_list = ProblemGenerator.get_random_duses(1000)
         order_list[i].pack_items_into_cardboard_boxes(cbox_list)
-        print(i)
-        print(len(order_list[i].packed_item_list))
     problem = VRP3D(vehicle_list,
                     order_list,
                     depot_coord)
