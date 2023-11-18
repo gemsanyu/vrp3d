@@ -1,0 +1,5 @@
+Siapkan Kardus (1) 10UKSW153 untuk Order 24
+	(1). Rotasi Obat ULTR053 dari Order 24 menjadi (17, 17, 14), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat TECN131 dari Order 24 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 14)
+	(3). Rotasi Obat SENS041 dari Order 24 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 16)
+	(4). Rotasi Obat KETR002 dari Order 24 menjadi (18, 7, 4), dan letakkan pada posisi : (0, 11, 14)
