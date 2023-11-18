@@ -1,5 +1,6 @@
 from copy import copy
-from typing import List, Tuple, Optional, Union
+import pathlib
+from typing import List, Optional
 from uuid import uuid1
 
 import matplotlib.animation as animation
@@ -207,6 +208,8 @@ class Box(Item):
         plt.show() 
     
     def generate_packing_animation(self):
+        if not self.packed_items:
+            return
         fig = plt.figure()
         axGlob = fig.add_subplot(projection='3d')
         # . plot scatola 
@@ -227,5 +230,5 @@ class Box(Item):
             artists += [container]
             counter = counter + 1
         ani = animation.ArtistAnimation(fig, artists, interval=1000,repeat=False)
-        filename = self.id+".html"
-        ani.save(filename=filename, writer="html")
+        filename = pathlib.Path()/"animations"/(self.id+".html")
+        ani.save(filename=filename.absolute(), writer="html")
