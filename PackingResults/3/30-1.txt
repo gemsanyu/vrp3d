@@ -1,0 +1,9 @@
+Siapkan Kardus (1) 10UKDW004 untuk Order 30
+	(1). Rotasi Obat NONC048 dari Order 30 menjadi (20, 30, 40), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat SENS037 dari Order 30 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 40)
+	(3). Rotasi Obat SENS037 dari Order 30 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 11, 40)
+	(4). Rotasi Obat SENS037 dari Order 30 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 42)
+	(5). Rotasi Obat HERB018 dari Order 30 menjadi (23, 7, 3), dan letakkan pada posisi : (0, 22, 40)
+	(6). Rotasi Obat MATR080 dari Order 30 menjadi (5, 17, 5), dan letakkan pada posisi : (20, 0, 0)
+	(7). Rotasi Obat MATR080 dari Order 30 menjadi (5, 17, 5), dan letakkan pada posisi : (20, 0, 5)
+	(8). Rotasi Obat GLIM006 dari Order 30 menjadi (13, 6, 4), dan letakkan pada posisi : (0, 11, 42)

@@ -20,7 +20,7 @@ class Medicine(Item):
                  size:np.ndarray, 
                  weight:int,
                  temp_class:int):
-        super(Medicine, self).__init__(size)
+        super(Medicine, self).__init__(size, product_id)
         self.weight = weight
         self.temp_class = temp_class
         self.order_id = order_id

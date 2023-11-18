@@ -1,0 +1,7 @@
+Siapkan Kardus (1) 10UKSB001 untuk Order 47
+	(1). Rotasi Obat NOPE001 dari Order 47 menjadi (7, 21, 16), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat SURG060 dari Order 47 menjadi (4, 23, 13), dan letakkan pada posisi : (0, 0, 16)
+	(3). Rotasi Obat AMOS049 dari Order 47 menjadi (2, 17, 11), dan letakkan pada posisi : (4, 0, 16)
+	(4). Rotasi Obat NARO002 dari Order 47 menjadi (3, 3, 3), dan letakkan pada posisi : (4, 17, 16)
+	(5). Rotasi Obat NARO002 dari Order 47 menjadi (3, 3, 3), dan letakkan pada posisi : (4, 17, 19)
+	(6). Rotasi Obat NARO002 dari Order 47 menjadi (3, 3, 3), dan letakkan pada posisi : (4, 17, 22)

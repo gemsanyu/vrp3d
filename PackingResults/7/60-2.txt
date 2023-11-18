@@ -1,0 +1,5 @@
+Siapkan Kardus (2) 10UKPB02 untuk Order 60
+	(1). Rotasi Obat UNIF004 dari Order 60 menjadi (5, 8, 5), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat UNIF004 dari Order 60 menjadi (5, 8, 5), dan letakkan pada posisi : (0, 0, 5)
+	(3). Rotasi Obat TANA009 dari Order 60 menjadi (4, 10, 3), dan letakkan pada posisi : (0, 0, 10)
+	(4). Rotasi Obat UNIF004 dari Order 60 menjadi (5, 5, 8), dan letakkan pada posisi : (0, 8, 0)

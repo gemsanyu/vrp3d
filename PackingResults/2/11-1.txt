@@ -1,0 +1,9 @@
+Siapkan Kardus (1) 10UKDW310 untuk Order 11
+	(1). Rotasi Obat BAIR001 dari Order 11 menjadi (38, 38, 46), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat ACRY016 dari Order 11 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 46)
+	(3). Rotasi Obat ACRY007 dari Order 11 menjadi (17, 11, 2), dan letakkan pada posisi : (17, 0, 46)
+	(4). Rotasi Obat REBO001 dari Order 11 menjadi (13, 6, 4), dan letakkan pada posisi : (0, 11, 46)
+	(5). Rotasi Obat REBO001 dari Order 11 menjadi (13, 6, 4), dan letakkan pada posisi : (13, 11, 46)
+	(6). Rotasi Obat REBO001 dari Order 11 menjadi (13, 6, 4), dan letakkan pada posisi : (0, 17, 46)
+	(7). Rotasi Obat FORC004 dari Order 11 menjadi (5, 10, 5), dan letakkan pada posisi : (26, 11, 46)
+	(8). Rotasi Obat EPIR003 dari Order 11 menjadi (4, 7, 4), dan letakkan pada posisi : (34, 0, 46)

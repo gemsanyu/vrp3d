@@ -267,7 +267,7 @@ class ProblemGenerator:
         temp = MasterKendaraan.get_random_vehicle()[1]
         size0, size1, size2 = int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))
         size = np.asanyarray([size0,size1,size2], dtype=np.int64)
-        return create_vehicle(temp["Vendor"], size, int(float(temp["Max Berat Gram"])), int(float(temp["Cost Per KM"])), int(float(temp["Cost Per KG"])), TEMP_CLASS[temp["Kategori Pengiriman"]], int(float(temp["Max Duration"])))
+        return create_vehicle(temp["Vendor"], size, int(float(temp["Max Berat Gram"])), int(float(temp["Cost Per KM"])), int(float(temp["Cost Per KG"])), TEMP_CLASS[temp["Kategori Pengiriman"]], int(float(temp["Max Duration"])), temp["Jenis Kendaraan"])
 
 
     def generate_random_vehicles(number_of_vehicles):
@@ -277,7 +277,7 @@ class ProblemGenerator:
         temp = random.choice(list(MasterDus.Dus.items()))[1]
         size0,size1,size2 = int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))
         size = np.asanyarray([size0,size1,size2], dtype=np.int64)
-        return Box(size, int(float(temp["Max Berat Gram"])))
+        return Box(size, int(float(temp["Max Berat Gram"])), temp["Kode Dus"])
     
     def get_random_duses(number_of_duses):
         return [ProblemGenerator.get_random_dus() for i in range(number_of_duses)]

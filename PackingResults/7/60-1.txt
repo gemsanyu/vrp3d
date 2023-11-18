@@ -1,0 +1,6 @@
+Siapkan Kardus (1) 10UKSW153 untuk Order 60
+	(1). Rotasi Obat ULTR053 dari Order 60 menjadi (17, 17, 14), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat TECN094 dari Order 60 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 14)
+	(3). Rotasi Obat TECN094 dari Order 60 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 0, 16)
+	(4). Rotasi Obat TANA009 dari Order 60 menjadi (10, 4, 3), dan letakkan pada posisi : (0, 11, 14)
+	(5). Rotasi Obat TANA009 dari Order 60 menjadi (10, 3, 4), dan letakkan pada posisi : (0, 15, 14)

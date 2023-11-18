@@ -1,0 +1,21 @@
+Order 32
+	(1). Rotasi Dus 10UKDW044 dari Order 32 menjadi (41, 41, 41), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat UNFO001 dari Order 32 menjadi (16, 29, 12), dan letakkan pada posisi : (41, 0, 0)
+	(3). Rotasi Obat UNFO001 dari Order 32 menjadi (16, 29, 12), dan letakkan pada posisi : (57, 0, 0)
+	(4). Rotasi Obat UNFO001 dari Order 32 menjadi (16, 29, 12), dan letakkan pada posisi : (73, 0, 0)
+Order 35
+	(1). Rotasi Dus 10UKDW004 dari Order 35 menjadi (31, 46, 26), dan letakkan pada posisi : (0, 41, 0)
+	(2). Rotasi Dus 10UKSW268 dari Order 35 menjadi (40, 40, 30), dan letakkan pada posisi : (41, 29, 0)
+	(3). Rotasi Obat LORE013 dari Order 35 menjadi (7, 8, 7), dan letakkan pada posisi : (89, 0, 0)
+Order 38
+	(1). Rotasi Dus 10UKSW006 dari Order 38 menjadi (16, 21, 16), dan letakkan pada posisi : (81, 29, 0)
+	(2). Rotasi Dus 10UKPB07 dari Order 38 menjadi (24, 30, 10), dan letakkan pada posisi : (0, 41, 26)
+	(3). Rotasi Obat YOUV028 dari Order 38 menjadi (10, 15, 8), dan letakkan pada posisi : (89, 8, 0)
+Order 40
+	(1). Rotasi Dus 10UKPB03 dari Order 40 menjadi (11, 13, 9), dan letakkan pada posisi : (31, 77, 0)
+	(2). Rotasi Dus 10UKPIP01 dari Order 40 menjadi (11, 16, 2), dan letakkan pada posisi : (81, 61, 0)
+	(3). Rotasi Obat GLUT001 dari Order 40 menjadi (6, 12, 6), dan letakkan pada posisi : (31, 41, 0)
+	(4). Rotasi Obat ACRY016 dari Order 40 menjadi (17, 11, 2), dan letakkan pada posisi : (81, 50, 0)
+	(5). Rotasi Obat KETE002 dari Order 40 menjadi (8, 9, 2), dan letakkan pada posisi : (31, 53, 0)
+	(6). Rotasi Obat TELM002 dari Order 40 menjadi (18, 7, 2), dan letakkan pada posisi : (42, 77, 0)
+	(7). Rotasi Obat TELM002 dari Order 40 menjadi (18, 7, 2), dan letakkan pada posisi : (60, 77, 0)
