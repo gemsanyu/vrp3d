@@ -229,5 +229,3 @@ class Box(Item):
         ani = animation.ArtistAnimation(fig, artists, interval=1000,repeat=False)
         filename = self.id+".html"
         ani.save(filename=filename, writer="html")
-        exit()
-        # plt.show() 

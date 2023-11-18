@@ -2,7 +2,7 @@ from random import seed
 
 from item.box import Box
 from data.problem_generator import ProblemGenerator
-from vns.greedy_init import greedy_initialization
+from vns.saving import saving
 from vns.repack import repack
 from vrp3d.vrp3d import VRP3D
 
@@ -10,7 +10,7 @@ from vrp3d.vrp3d import VRP3D
 def run():
     ProblemGenerator.initialize()
     kode_cabang, depot_coord = ProblemGenerator.get_random_depot()
-    order_list = ProblemGenerator.generate_random_orders(5, 3, 10, kode_cabang)
+    order_list = ProblemGenerator.generate_random_orders(20, 3, 10, kode_cabang)
     vehicle_list = ProblemGenerator.generate_random_vehicles(10)
     
     cbox_type_list = ProblemGenerator.get_all_duses(1)
@@ -25,19 +25,12 @@ def run():
     print("START SOLUTION GENERATION")
 
                     
-    solution = greedy_initialization(problem)
+    solution = saving(problem)
     problem.reset(solution)
     for i in range(solution.num_vehicle):
-        print(i)
-        problem.vehicle_list[i].box.visualize_packed_items()
-    print(solution.tour_list)
+        problem.vehicle_list[i].box.generate_packing_animation()
 
-    solution = repack(solution, problem)
-    problem.reset(solution)
-    for i in range(solution.num_vehicle):
-        print(i)
-        problem.vehicle_list[i].box.visualize_packed_items()
-    print(solution.tour_list)
+
 
 if __name__ == "__main__":
     seed(20)
