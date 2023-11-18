@@ -20,7 +20,7 @@ def run():
         print(order_list[i].packed_item_list)
         for item in order_list[i].packed_item_list:
             if isinstance(item, Box):
-                item.visualize_packed_items()
+                item.generate_packing_animation()
                 break
 
     # problem = VRP3D(vehicle_list,

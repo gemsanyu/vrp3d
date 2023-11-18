@@ -8,6 +8,7 @@ class Item:
         self.volume = np.prod(size)
         self.position = None
         self.packing_order = 0
+        self.insertion_order = 0
         self.alternative_sizes = [
             [size[0], size[1], size[2]],
             [size[0], size[2], size[1]], 

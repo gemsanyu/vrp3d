@@ -2,7 +2,7 @@ from copy import copy
 from typing import List, Tuple, Optional, Union
 from uuid import uuid1
 
-import matplotlib as mpl
+import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -112,6 +112,7 @@ class Box(Item):
         self.weight += item.weight
         item.position = position
         self.packed_items += [item]
+        item.insertion_order = len(self.packed_items)
         # now generate extreme points
         # 1. initial extreme points
         new_eps = [
@@ -161,18 +162,32 @@ class Box(Item):
         self.ep_list = np.delete(self.ep_list, np.all(self.ep_list ==position,axis=-1), axis=0)
         # self.visualize_packed_items()
 
-    def plot_cube(self, ax, x, y, z, dx, dy, dz, color='red'):
+    def plot_cube(self, ax, x, y, z, dx, dy, dz, color='red', text_annot:str=""):
         """ Auxiliary function to plot a cube. code taken somewhere from the web.  """
         xx = [x, x, x+dx, x+dx, x]
         yy = [y, y+dy, y+dy, y, y]
         kwargs = {'alpha': 1, 'color': color}
-        ax.plot3D(xx, yy, [z]*5, **kwargs)
-        ax.plot3D(xx, yy, [z+dz]*5, **kwargs)
-        ax.plot3D([x, x], [y, y], [z, z+dz], **kwargs)
-        ax.plot3D([x, x], [y+dy, y+dy], [z, z+dz], **kwargs)
-        ax.plot3D([x+dx, x+dx], [y+dy, y+dy], [z, z+dz], **kwargs)
-        ax.plot3D([x+dx, x+dx], [y, y], [z, z+dz], **kwargs)
-    
+        artists = []
+        # front
+        # xs = [x, x,    x+dx, x+dx, x]
+        # ys = [y, y,    y,    y,    y]
+        # zs = [z, z+dz, z+dz, z,    z]
+        # # 
+
+        # # xs = xx*2+[x,x]*2+[x+dx,x+dx]*2
+        # # ys = yy*2+[y,y]+[y+dy, y+dy]*2+[y,y]
+        # # zs = [z]*5+[z+dz]*5+[z, z+dz]*4
+        # # print(xs,ys,zs)
+        # artists += [ax.plot3D(xs,ys,zs,**kwargs)]
+        artists+= ax.plot3D(xx, yy, [z]*5, **kwargs)
+        artists+= ax.plot3D(xx, yy, [z+dz]*5, **kwargs)
+        artists+= ax.plot3D([x, x], [y, y], [z, z+dz], **kwargs)
+        artists+= ax.plot3D([x, x], [y+dy, y+dy], [z, z+dz], **kwargs)
+        artists+= ax.plot3D([x+dx, x+dx], [y+dy, y+dy], [z, z+dz], **kwargs)
+        artists+= ax.plot3D([x+dx, x+dx], [y, y], [z, z+dz], **kwargs)
+        if text_annot!="":
+            artists+= [ax.text(x+dx/2,y,z+dz/2,text_annot,None,fontweight=1000)]
+        return artists
 
     def visualize_packed_items(self):
         fig = plt.figure()
@@ -187,6 +202,31 @@ class Box(Item):
             color = colorList[counter % len(colorList)]
             self.plot_cube(axGlob, float(x), float(y), float(z), 
                      float(item.size[0]), float(item.size[1]), float(item.size[2]),
-                     color=color)
+                     color=color,text_annot=str(item.insertion_order))
             counter = counter + 1  
-        plt.show()   
+        plt.show() 
+    
+    def generate_packing_animation(self):
+        fig = plt.figure()
+        axGlob = fig.add_subplot(projection='3d')
+        # . plot scatola 
+        self.plot_cube(axGlob,0, 0, 0, float(self.size[0]), float(self.size[1]), float(self.size[2]))
+        # . plot intems in the box 
+        colorList = ["black", "blue", "magenta", "orange"]
+        counter = 0
+        artists = []
+        for i, item in enumerate(self.packed_items):
+            x,y,z = item.position
+            color = colorList[counter % len(colorList)]
+            container = self.plot_cube(axGlob, float(x), float(y), float(z), 
+                     float(item.size[0]), float(item.size[1]), float(item.size[2]),
+                     color=color,text_annot=str(item.insertion_order))
+            if i>0:
+                container += artists[i-1]
+            artists += [container]
+            counter = counter + 1
+        ani = animation.ArtistAnimation(fig, artists, interval=1000,repeat=False)
+        filename = self.id+".html"
+        ani.save(filename=filename, writer="html")
+        exit()
+        # plt.show() 
