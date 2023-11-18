@@ -54,7 +54,7 @@ class VRP3D:
             return
         
         for i, order in enumerate(self.order_list):
-            self.order_list[i].reset(solution.packing_position_list[i])
+            self.order_list[i].reset(solution.packing_position_list[i], solution.insertion_order_list[i], solution.rotate_count_list[i])
         dist_mat = self.distance_matrix
         for i, vec in enumerate(self.vehicle_list):
             packed_items = [self.order_list[oi].packed_item_list for oi in solution.tour_list[i]]

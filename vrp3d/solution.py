@@ -22,8 +22,10 @@ class Solution:
         self.num_vehicle = num_vehicle
         self.num_order = num_order
         self.tour_list: List[List[int]] = [[] for _ in range(num_vehicle)]
-        self.packing_position_list: List[List[Tuple[int,int,int]]] = [[] for _ in range(num_order)]
+        self.packing_position_list: List[List[np.ndarray]] = [[] for _ in range(num_order)]
         self.ep_list: List[np.ndarray] = [[np.zeros((3,), dtype=np.int64)] for _ in range(num_vehicle)]
         self.arrival_time_list: List[List[int]] = [[] for _ in range(num_vehicle)]
+        self.insertion_order_list: List[List[int]] = [[] for _ in range(num_order)]
+        self.rotate_count_list: List[List[int]] = [[] for _ in range(num_order)]
         
     

@@ -228,19 +228,22 @@ def pack_items_to_boxes(box_type_list: List[Box],
     unpacked_items += too_big_item_list + item_list
     return used_boxes_final, unpacked_items         
 
-def add_items_to_box(box:Box, item_list:List[Item])->Tuple[bool, Dict[str, Tuple[int,int,int]]]:
+def add_items_to_box(box:Box, 
+                     item_list:List[Item])->Tuple[bool, Dict[str, np.ndarray], Dict[str,int], Dict[str,int]]:
     # duplicate items for each rotation
     dup_items: List[Item] = []
     for i, item in enumerate(item_list):
         item_list[i].rotate_count = 0
-        for r in range(1,6):
+        for r in range(6):
             new_item = deepcopy(item)
             new_item.rotate_count = r
             dup_items += [new_item]
-    item_list += dup_items
+    item_list = dup_items
     item_list = sorted(item_list, key=cmp_to_key(cmp_item_ah))
     packed_item_list = []
     position_dict = {}
+    insertion_order_dict = {}
+    rotate_count_dict = {}
 
     unpacked_items = []
     while len(item_list) > 0:
@@ -255,6 +258,8 @@ def add_items_to_box(box:Box, item_list:List[Item])->Tuple[bool, Dict[str, Tuple
         box.insert(ep_i, item)
         packed_item_list += [item]
         position_dict[item.id] = item.position
+        insertion_order_dict[item.id] = item.insertion_order
+        rotate_count_dict[item.id] = item.rotate_count
         # remove the duplicate items, in unpacked items
         for i in reversed(range(len(unpacked_items))):
             if unpacked_items[i].id == item.id:
@@ -265,9 +270,9 @@ def add_items_to_box(box:Box, item_list:List[Item])->Tuple[bool, Dict[str, Tuple
                 del item_list[i]
     
     if len(unpacked_items)>0:
-        return False, None
+        return False, None, None, None
 
-    return True, position_dict
+    return True, position_dict, insertion_order_dict, rotate_count_dict
 
 
         

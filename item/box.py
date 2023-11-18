@@ -27,7 +27,7 @@ class Box(Item):
         self.filled_volume = 0
         self.temperature = temperature
         self.ep_list: np.ndarray = None
-        self.alternative_sizes = self.alternative_sizes[np.lexsort((-self.alternative_sizes[0], -self.alternative_sizes[1], -self.alternative_sizes[2]))]
+        self.alternative_sizes = self.alternative_sizes[np.lexsort((-self.alternative_sizes[:,0], -self.alternative_sizes[:,1], -self.alternative_sizes[:,2]))]
         d_item1 = Item(np.asanyarray([size[0],size[1],1],dtype=np.int64))
         d_item1.position = np.asanyarray([0,0,-1], dtype=np.int64)
         d_item2 = Item(np.asanyarray([size[0],1,size[2]],dtype=np.int64))
@@ -215,6 +215,7 @@ class Box(Item):
         colorList = ["black", "blue", "magenta", "orange"]
         counter = 0
         artists = []
+        self.packed_items = sorted(self.packed_items, key=lambda item: item.insertion_order)
         for i, item in enumerate(self.packed_items):
             x,y,z = item.position
             color = colorList[counter % len(colorList)]

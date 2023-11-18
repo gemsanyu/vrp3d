@@ -32,5 +32,5 @@ def append_order(order_i:int,
     vec = problem.vehicle_list[vec_i]
     order = problem.order_list[order_i]        
     item_list = copy(order.packed_item_list)
-    is_packing_feasible, position_dict = add_items_to_box(vec.box, item_list)
-    return is_packing_feasible, position_dict
+    is_packing_feasible, position_dict, insertion_order_dict, rotate_count_dict = add_items_to_box(vec.box, item_list)
+    return is_packing_feasible, position_dict, insertion_order_dict, rotate_count_dict

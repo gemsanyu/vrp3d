@@ -53,7 +53,7 @@ def greedy_initialization(problem: VRP3D) -> Solution:
             arrival_time_to_order, is_fit_duration = get_new_arrival_time(action.order_i, action.vec_i, problem, solution.tour_list[action.vec_i], solution.arrival_time_list[action.vec_i])
             if not is_fit_duration:
                 continue
-            is_insertion_feasible, position_dict = append_order(action.order_i, action.vec_i, problem)
+            is_insertion_feasible, position_dict, insertion_order_dict, rotate_count_dict = append_order(action.order_i, action.vec_i, problem)
             if is_insertion_feasible:
                 new_sol.tour_list[action.vec_i] += [action.order_i]
                 new_sol.arrival_time_list[action.vec_i] += [arrival_time_to_order]
@@ -61,8 +61,14 @@ def greedy_initialization(problem: VRP3D) -> Solution:
                 for j in range(order.num_item_packed):
                     item = order.packed_item_list[j]
                     item.position = position_dict[item.id]
+                    item.insertion_order = insertion_order_dict[item.id]
+                    item.rotate_count =rotate_count_dict[item.id]
                 order_packing_position = [order.packed_item_list[j].position for j in range(order.num_item_packed)]
+                insertion_order = [order.packed_item_list[j].insertion_order for j in range(order.num_item_packed)]
+                rotate_count = [order.packed_item_list[j].rotate_count for j in range(order.num_item_packed)]
                 new_sol.packing_position_list[action.order_i] = order_packing_position
+                new_sol.insertion_order_list[action.order_i] = insertion_order
+                new_sol.rotate_count_list[action.order_i] = rotate_count
                 new_sol.ep_list[action.vec_i] = copy(problem.vehicle_list[action.vec_i].box.ep_list)
                 solution = new_sol
                 break
