@@ -1,0 +1,6 @@
+Siapkan Kardus (1) 50CSB01 untuk Order 15
+	(1). Rotasi Obat TUBE129 dari Order 15 menjadi (7, 11, 5), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat STAT005 dari Order 15 menjadi (7, 3, 14), dan letakkan pada posisi : (0, 0, 5)
+	(3). Rotasi Obat STAT005 dari Order 15 menjadi (7, 3, 14), dan letakkan pada posisi : (0, 3, 5)
+	(4). Rotasi Obat IBRA003 dari Order 15 menjadi (5, 3, 12), dan letakkan pada posisi : (0, 6, 5)
+	(5). Rotasi Obat ARIS002 dari Order 15 menjadi (6, 2, 16), dan letakkan pada posisi : (0, 9, 5)

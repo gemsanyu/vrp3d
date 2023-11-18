@@ -1,0 +1,6 @@
+Siapkan Kardus (2) 10UKSB002 untuk Order 44
+	(1). Rotasi Obat REDA002 dari Order 44 menjadi (6, 13, 5), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat REDA002 dari Order 44 menjadi (6, 13, 5), dan letakkan pada posisi : (0, 0, 5)
+	(3). Rotasi Obat AMOS018 dari Order 44 menjadi (2, 17, 11), dan letakkan pada posisi : (0, 0, 10)
+	(4). Rotasi Obat AMOS018 dari Order 44 menjadi (2, 17, 11), dan letakkan pada posisi : (2, 0, 10)
+	(5). Rotasi Obat AMOS018 dari Order 44 menjadi (2, 17, 11), dan letakkan pada posisi : (4, 0, 10)

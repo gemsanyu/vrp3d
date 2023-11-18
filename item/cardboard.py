@@ -10,6 +10,6 @@ class Cardboard(Box):
                  max_weight: int, 
                  support_alpha: float = 0.51, 
                  temperature: int = 0):
-        super().__init__(size, max_weight, support_alpha, temperature)
+        super().__init__(size, max_weight, code, support_alpha, temperature)
         self.code = code
         self.details = details

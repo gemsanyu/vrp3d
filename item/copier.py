@@ -7,6 +7,7 @@ def get_a_box_copy(box:Union[Box,Cardboard]) -> Union[Box,Cardboard]:
     if isinstance(box, Box):
         return Box(box.size, 
                    box.max_weight,
+                   box.name,
                    box.support_alpha, 
                    box.temperature)
     

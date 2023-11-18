@@ -12,14 +12,17 @@ from item.utils import compute_supported_area
 from item.utils import is_projection_valid_xy, is_projection_valid_xz, is_projection_valid_yx, is_projection_valid_yz, is_projection_valid_zx, is_projection_valid_zy
 from item.utils import is_overlap_any_packed_items
 
+import os
 
 class Box(Item):
     def __init__(self, 
                  size: np.ndarray, 
                  max_weight:int,
+                 name:str,
                  support_alpha:float=0.51,
-                 temperature:int= 0):
-        super(Box, self).__init__(size)
+                 temperature:int= 0,
+                 ):
+        super(Box, self).__init__(size, name)
         self.id = str(uuid1())
         self.max_weight = max_weight
         self.support_alpha = support_alpha
@@ -29,11 +32,11 @@ class Box(Item):
         self.temperature = temperature
         self.ep_list: np.ndarray = None
         self.alternative_sizes = self.alternative_sizes[np.lexsort((-self.alternative_sizes[:,0], -self.alternative_sizes[:,1], -self.alternative_sizes[:,2]))]
-        d_item1 = Item(np.asanyarray([size[0],size[1],1],dtype=np.int64))
+        d_item1 = Item(np.asanyarray([size[0],size[1],1],dtype=np.int64),"dummy")
         d_item1.position = np.asanyarray([0,0,-1], dtype=np.int64)
-        d_item2 = Item(np.asanyarray([size[0],1,size[2]],dtype=np.int64))
+        d_item2 = Item(np.asanyarray([size[0],1,size[2]],dtype=np.int64),"dummy")
         d_item2.position = np.asanyarray([0,-1,0], dtype=np.int64)
-        d_item3 = Item(np.asanyarray([1,size[1],size[2]],dtype=np.int64))
+        d_item3 = Item(np.asanyarray([1,size[1],size[2]],dtype=np.int64),"dummy")
         d_item3.position = np.asanyarray([-1,0,0], dtype=np.int64)
         self.dummy_items = [d_item1, d_item2, d_item3]
         self.reset()
@@ -207,13 +210,17 @@ class Box(Item):
             counter = counter + 1  
         plt.show() 
     
-    def generate_packing_animation(self):
+    def generate_packing_animation(self, filename=None, chdir_in="", chdir_out=""):
         if not self.packed_items:
             return
         fig = plt.figure()
+        axmax = max(float(self.alternative_sizes[0][0]), float(self.alternative_sizes[0][1]), float(self.alternative_sizes[0][2]))
         axGlob = fig.add_subplot(projection='3d')
+        axGlob.axes.set_xlim3d(0, axmax) 
+        axGlob.axes.set_ylim3d(0, axmax) 
+        axGlob.axes.set_zlim3d(0, axmax) 
         # . plot scatola 
-        self.plot_cube(axGlob,0, 0, 0, float(self.size[0]), float(self.size[1]), float(self.size[2]))
+        self.plot_cube(axGlob,0, 0, 0, float(self.alternative_sizes[0][0]), float(self.alternative_sizes[0][1]), float(self.alternative_sizes[0][2]))
         # . plot intems in the box 
         colorList = ["black", "blue", "magenta", "orange"]
         counter = 0
@@ -230,5 +237,17 @@ class Box(Item):
             artists += [container]
             counter = counter + 1
         ani = animation.ArtistAnimation(fig, artists, interval=1000,repeat=False)
-        filename = pathlib.Path()/"animations"/(self.id+".html")
-        ani.save(filename=filename.absolute(), writer="html")
+        #filename = self.id+".html"
+        if filename is None:
+            filename = f"{self.id}.html"
+        else:
+            filename=f"{filename}.html"
+
+        if not os.path.exists(chdir_in):
+            os.makedirs(chdir_in)
+
+        os.chdir(chdir_in)
+        ani.save(filename=filename, writer="html")
+        os.chdir(chdir_out)
+
+        plt.close()

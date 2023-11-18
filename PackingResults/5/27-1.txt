@@ -1,0 +1,3 @@
+Siapkan Kardus (1) 10UKPB05 untuk Order 27
+	(1). Rotasi Obat ACTI041 dari Order 27 menjadi (5, 10, 23), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat ACTI041 dari Order 27 menjadi (5, 10, 23), dan letakkan pada posisi : (0, 10, 0)

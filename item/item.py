@@ -2,7 +2,8 @@ import numpy as np
 
 class Item:
     def __init__(self,
-                 size:np.ndarray):
+                 size:np.ndarray,
+                 name:str):
         self.original_size = size
         self.weight:float
         self.volume = np.prod(size)
@@ -20,6 +21,7 @@ class Item:
         self.alternative_sizes = np.asanyarray(self.alternative_sizes, dtype=np.int64)
         # self.alternative_sizes = sorted(self.alternative_sizes, key=lambda sz: (-sz[2],-sz[0],sz[1]))
         self.rotate_count = 0
+        self.name = name
     
     @property
     def size(self):
