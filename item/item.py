@@ -22,7 +22,7 @@ class Item:
     
     @property
     def size(self):
-        return self.alternative_sizes[self.rotate_count%6]
+        return self.alternative_sizes[self.rotate_count%6,:]
     
     @property
     def face_area(self):

@@ -1,11 +1,13 @@
 import copy
 import csv
 import random
+from typing import List
 from uuid import uuid1
 
 import numpy as np
     
 from item.box import Box
+from item.cardboard import Cardboard
 from item.medicine import Medicine
 from order.order import Order
 from vehicle.vehicle import create_vehicle
@@ -154,11 +156,13 @@ class MasterDus:
             temp = np.array(list(reader))[1:]
             for i in temp:
                 MasterDus.Dus[i[0]] = {
-                    "Jenis Dus" : i[1],
-                    "Max Berat Gram" : i[2],
-                    "Panjang Cm" : i[3],
-                    "Lebar Cm" : i[4],
-                    "Tinggi Cm" : i[5],
+                    "Kode Dus" : i[0],
+                    "Panjang Cm" : i[1],
+                    "Lebar Cm" : i[2],
+                    "Tinggi Cm" : i[3],
+                    "Volume" : i[5],
+                    "Max Berat Gram" : i[5],
+                    "Details": i[6]
                 }
 
     def get_dus(dus_code):
@@ -277,6 +281,20 @@ class ProblemGenerator:
     
     def get_random_duses(number_of_duses):
         return [ProblemGenerator.get_random_dus() for i in range(number_of_duses)]
+
+    def get_all_duses(num_each_dus_size=100) -> List[Cardboard]:
+        all_dustype_list = list(MasterDus.Dus.values())
+        duses = []
+        for i in range(len(all_dustype_list)):
+            dustype = all_dustype_list[i]
+            for j in range(num_each_dus_size):
+                size0,size1,size2 = int(float(dustype["Panjang Cm"])), int(float(dustype["Lebar Cm"])), int(float(dustype["Tinggi Cm"]))
+                size = np.asanyarray([size0,size1,size2], dtype=np.int64)
+                code = dustype["Kode Dus"]
+                details = dustype["Details"]
+                dus = Cardboard(code, details, size, int(float(dustype["Max Berat Gram"])))
+                duses += [dus]
+        return duses
 
 
     def generate_problem(number_of_vehicles, number_of_orders, max_each_quantity, max_total_quantity):

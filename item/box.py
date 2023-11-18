@@ -1,14 +1,16 @@
 from copy import copy
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Union
 from uuid import uuid1
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 
 from item.item import Item
-from item.utils import is_overlapping_3d, compute_supported_area
+from item.utils import compute_supported_area
 from item.utils import is_projection_valid_xy, is_projection_valid_xz, is_projection_valid_yx, is_projection_valid_yz, is_projection_valid_zx, is_projection_valid_zy
 from item.utils import is_overlap_any_packed_items
+
 
 class Box(Item):
     def __init__(self, 
@@ -25,6 +27,15 @@ class Box(Item):
         self.filled_volume = 0
         self.temperature = temperature
         self.ep_list: np.ndarray = None
+        self.alternative_sizes = self.alternative_sizes[np.lexsort((-self.alternative_sizes[0], -self.alternative_sizes[1], -self.alternative_sizes[2]))]
+        d_item1 = Item(np.asanyarray([size[0],size[1],1],dtype=np.int64))
+        d_item1.position = np.asanyarray([0,0,-1], dtype=np.int64)
+        d_item2 = Item(np.asanyarray([size[0],1,size[2]],dtype=np.int64))
+        d_item2.position = np.asanyarray([0,-1,0], dtype=np.int64)
+        d_item3 = Item(np.asanyarray([1,size[1],size[2]],dtype=np.int64))
+        d_item3.position = np.asanyarray([-1,0,0], dtype=np.int64)
+        self.dummy_items = [d_item1, d_item2, d_item3]
+        self.reset()
 
     # reset to initial state
     # or to a given value (say a state of a solution)
@@ -60,7 +71,6 @@ class Box(Item):
         is_overflow = np.any(is_overflow)
         if is_overflow:
             return False
-        
         if is_overlap_any_packed_items(position, item.size, self.packed_items):
             return False
         # for p_item in self.packed_items:
@@ -72,11 +82,12 @@ class Box(Item):
             return True
         total_supported_area = 0
         
-        for p_item in self.packed_items:
-            total_supported_area += compute_supported_area(position, 
-                                                           item.size, 
-                                                           p_item.position,
-                                                           p_item.size)
+        total_supported_area = compute_supported_area(position, item.size, self.packed_items)
+        # for p_item in self.packed_items:
+        #     total_supported_area += compute_supported_area(position, 
+        #                                                    item.size, 
+        #                                                    p_item.position,
+        #                                                    p_item.size)
 
         supported_ratio = total_supported_area/item.face_area
         return supported_ratio >= self.support_alpha
@@ -95,13 +106,12 @@ class Box(Item):
             (ep_zy)
         ]
     """
-    def insert(self, ep_i: int, item:Item, is_using_rs:bool):
-        position = self.ep_list[ep_i].pos
+    def insert(self, ep_i: int, item:Item):
+        position = self.ep_list[ep_i,:]
         self.filled_volume += item.volume
         self.weight += item.weight
         item.position = position
         self.packed_items += [item]
-
         # now generate extreme points
         # 1. initial extreme points
         new_eps = [
@@ -116,7 +126,7 @@ class Box(Item):
         max_bound = [-1,-1,-1,-1,-1,-1]
 
         # 2. project these points 
-        for p_item in self.packed_items:
+        for p_item in self.dummy_items+self.packed_items:
             projx = p_item.position[0]+p_item.size[0]
             projy = p_item.position[1]+p_item.size[1]
             projz = p_item.position[2]+p_item.size[2]
@@ -138,18 +148,18 @@ class Box(Item):
             if is_projection_valid_zy(item, p_item) and projy > max_bound[5]:
                 new_eps[5,:] = np.asanyarray([position[0], projy , position[2] + item.size[2]])
                 max_bound[5] = projy
-
-        # remove inserted position from extreme points
-        self.ep_list = np.delete(self.ep_list, [ep_i], axis=0)
-
+        
         # add new EPs to EPlist
         self.ep_list = np.concatenate([self.ep_list, new_eps], axis=0)
 
         # and remove duplicate extreme points
         self.ep_list = np.unique(self.ep_list, axis=0)
-        sorted_idx = np.lexsort((self.ep_list[:,2],self.ep_list[:,1],self.ep_list[:,0]), axis=0)
+        sorted_idx = np.lexsort([self.ep_list[:,0], self.ep_list[:,1], self.ep_list[:,2]], axis=0)
         self.ep_list = self.ep_list[sorted_idx]
-
+        
+        # remove inserted position from extreme points
+        self.ep_list = np.delete(self.ep_list, np.all(self.ep_list ==position,axis=-1), axis=0)
+        # self.visualize_packed_items()
 
     def plot_cube(self, ax, x, y, z, dx, dy, dz, color='red'):
         """ Auxiliary function to plot a cube. code taken somewhere from the web.  """
