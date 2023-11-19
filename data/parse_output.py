@@ -46,6 +46,8 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
 
                     print(c_tour_list)
 
+                    tempitems = []
+
                     for jtemp in range(len(c_tour_list)):
                         j = c_tour_list[jtemp]
                         order = problem.order_list[j]
@@ -53,13 +55,11 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
                         coords = order.coord
                         file.write(f",{coords[0]},{coords[1]},{order.id}")
 
-                        file2.write(f"Order {order.id}\n")
+                        #file2.write(f"Order {order.id}\n")
                         with open(f"PackingResults/Order{order.id}.txt", "w") as file4:
                             for itemindex in range(len(order.packed_item_list)):
                                 item = order.packed_item_list[itemindex]
-                                itemtype = None
                                 if isinstance(item, Box):
-                                    itemtype = "Dus"
 
                                     item.generate_packing_animation(f"{order.id}-{itemindex + 1}", f"PackingResults/{vehicle.id}", "../..")
                                     file4.write(f"({itemindex + 1}). Kardus {item.name} :\n")
@@ -74,15 +74,21 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
                                             file4.write(f"\t({item_in_box_index + 1}). Obat {item_in_box.name}\n")
 
                                 elif isinstance(item, Medicine):
-                                    itemtype = "Obat"
                                     file4.write(f"({itemindex + 1}). Obat {item.name}\n")
-                                file2.write(f"\t({itemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
+                                tempitems.append((item, order.id))
+                                #file2.write(f"\t({itemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
+
+                    tempitems = sorted(tempitems, key=lambda item: item[0].insertion_order)
+                    for tempitemindex in range(len(tempitems)):
+                        item = tempitems[tempitemindex][0]
+                        itemtype = None
+                        if isinstance(item, Box):
+                            itemtype = "Dus"
+                        elif isinstance(item, Medicine):
+                            itemtype = "Obat"
+                        file2.write(f"({tempitemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
 
                     file.write(f",{depot_coords[k][0]},{depot_coords[k][1]},-1\n")
-
-    with open(f"{output_file_name}_placeholder.csv", "w") as file:
-        file.write(".")
-    
 
 
 def parse_input(input_file_name="Dummy"):
