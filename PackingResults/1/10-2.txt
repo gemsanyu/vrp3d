@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10UKDW302 untuk Order 10
-	(1). Rotasi Obat DIAL001 dari Order 10 menjadi (4, 23, 29), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat DIAL001 dari Order 10 menjadi (4, 23, 29), dan letakkan pada posisi : (4, 0, 0)

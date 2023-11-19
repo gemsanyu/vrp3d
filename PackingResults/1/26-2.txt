@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10RMADIL08 untuk Order 26
-	(1). Rotasi Obat UNIF003 dari Order 26 menjadi (5, 5, 15), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat UNIF003 dari Order 26 menjadi (5, 5, 15), dan letakkan pada posisi : (0, 5, 0)

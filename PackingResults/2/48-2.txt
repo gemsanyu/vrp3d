@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10UKPB02 untuk Order 48
-	(1). Rotasi Obat REDA002 dari Order 48 menjadi (5, 13, 6), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat REDA002 dari Order 48 menjadi (5, 13, 6), dan letakkan pada posisi : (0, 0, 6)

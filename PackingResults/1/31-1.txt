@@ -1,9 +1,0 @@
-Siapkan Kardus (1) 10UKPLAS001 untuk Order 31
-	(1). Rotasi Obat STER020 dari Order 31 menjadi (6, 15, 6), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat FITM003 dari Order 31 menjadi (5, 17, 2), dan letakkan pada posisi : (0, 0, 6)
-	(3). Rotasi Obat FITM003 dari Order 31 menjadi (5, 17, 2), dan letakkan pada posisi : (0, 0, 8)
-	(4). Rotasi Obat ONBR004 dari Order 31 menjadi (6, 12, 8), dan letakkan pada posisi : (0, 0, 10)
-	(5). Rotasi Obat ONBR004 dari Order 31 menjadi (6, 12, 8), dan letakkan pada posisi : (0, 0, 18)
-	(6). Rotasi Obat VENT008 dari Order 31 menjadi (6, 10, 4), dan letakkan pada posisi : (0, 0, 26)
-	(7). Rotasi Obat ONBR004 dari Order 31 menjadi (6, 8, 12), dan letakkan pada posisi : (0, 12, 10)
-	(8). Rotasi Obat OXYV004 dari Order 31 menjadi (5, 9, 5), dan letakkan pada posisi : (0, 12, 22)
