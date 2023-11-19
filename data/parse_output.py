@@ -13,7 +13,7 @@ import copy
 import shutil
 import os
 
-def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_name="Dummy_result"):
+def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_name="Dummy"):
 
     folder = 'PackingResults'
     if not os.path.exists(folder):
@@ -27,7 +27,7 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
         elif os.path.isdir(file_path):
             shutil.rmtree(file_path)
 
-    with open(f"{output_file_name}.csv", "w") as file:
+    with open(f"{output_file_name}_result.csv", "w") as file:
         for k in range(len(problems)):
             solution = solutions[k]
             problem = problems[k]
@@ -79,6 +79,10 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
                                 file2.write(f"\t({itemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
 
                     file.write(f",{depot_coords[k][0]},{depot_coords[k][1]},-1\n")
+
+    with open(f"{output_file_name}_placeholder.csv", "w") as file:
+        file.write(".")
+    
 
 
 def parse_input(input_file_name="Dummy"):
