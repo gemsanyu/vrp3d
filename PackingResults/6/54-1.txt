@@ -1,7 +1,0 @@
-Siapkan Kardus (1) 10UKSW002 untuk Order 54
-	(1). Rotasi Obat VOLT010 dari Order 54 menjadi (12, 11, 2), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat NEUR003 dari Order 54 menjadi (12, 8, 5), dan letakkan pada posisi : (0, 0, 2)
-	(3). Rotasi Obat NEUR003 dari Order 54 menjadi (12, 8, 5), dan letakkan pada posisi : (0, 0, 7)
-	(4). Rotasi Obat PSID001 dari Order 54 menjadi (9, 4, 3), dan letakkan pada posisi : (0, 8, 2)
-	(5). Rotasi Obat OXAL003 dari Order 54 menjadi (7, 4, 4), dan letakkan pada posisi : (0, 8, 5)
-	(6). Rotasi Obat OXAL003 dari Order 54 menjadi (7, 4, 4), dan letakkan pada posisi : (0, 8, 9)

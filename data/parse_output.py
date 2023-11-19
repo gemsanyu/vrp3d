@@ -28,85 +28,58 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
             shutil.rmtree(file_path)
 
     with open(f"{output_file_name}.csv", "w") as file:
-        it = 1
         for k in range(len(problems)):
             solution = solutions[k]
             problem = problems[k]
             kode_cabang = kode_cabangs[k]
             for i in range(solution.num_vehicle):
-                with open(f"PackingResults/{it}.txt", "w") as file2:
-                    c_tour_list = solution.tour_list[i]
+                vehicle = problem.vehicle_list[i]
+                c_tour_list = solution.tour_list[i]
 
-                    if len(c_tour_list) == 0:
-                        continue
+                if len(c_tour_list) == 0:
+                    continue
 
-                    vehicle = problem.vehicle_list[i]
+                with open(f"PackingResults/{vehicle.id}.txt", "w") as file2:
+                    vehicle.box.generate_packing_animation(str(vehicle.id), "PackingResults", "..")
 
-                    vehicle.box.generate_packing_animation(str(it), "PackingResults", "..")
+                    file.write(f"{vehicle.id},{vehicle.vehicle_type},{vehicle.vendor},{kode_cabang},{depot_coords[k][0]},{depot_coords[k][1]},-1")
 
-                    file.write(f"{it},{vehicle.vehicle_type},{vehicle.vendor},{kode_cabang},{depot_coords[k][0]},{depot_coords[k][1]}")
+                    print(c_tour_list)
 
-                    for j in c_tour_list:
+                    for jtemp in range(len(c_tour_list)):
+                        j = c_tour_list[jtemp]
                         order = problem.order_list[j]
 
                         coords = order.coord
-                        file.write(f",{coords[0]},{coords[1]}")
+                        file.write(f",{coords[0]},{coords[1]},{order.id}")
 
                         file2.write(f"Order {order.id}\n")
-                        for itemindex in range(len(order.packed_item_list)):
-                            item = order.packed_item_list[itemindex]
-                            itemtype = None
-                            if isinstance(item, Box):
-                                itemtype = "Dus"
+                        with open(f"PackingResults/Order{order.id}.txt", "w") as file4:
+                            for itemindex in range(len(order.packed_item_list)):
+                                item = order.packed_item_list[itemindex]
+                                itemtype = None
+                                if isinstance(item, Box):
+                                    itemtype = "Dus"
 
-                                item.generate_packing_animation(f"{order.id}-{itemindex + 1}", f"PackingResults/{it}", "../..")
+                                    item.generate_packing_animation(f"{order.id}-{itemindex + 1}", f"PackingResults/{vehicle.id}", "../..")
+                                    file4.write(f"({itemindex + 1}). Kardus {item.name} :\n")
 
-                                if not os.path.exists(f"PackingResults/{it}"):
-                                    os.makedirs(f"PackingResults/{it}")
-                                with open(f"PackingResults/{it}/{order.id}-{itemindex + 1}.txt", "w") as file3:
-                                    file3.write(f"Siapkan Kardus ({itemindex + 1}) {item.name} untuk Order {order.id}\n")
-                                    for item_in_box_index in range(len(item.packed_items)):
-                                        item_in_box = item.packed_items[item_in_box_index]
-                                        file3.write(f"\t({item_in_box_index + 1}). Rotasi Obat {item_in_box.name} dari Order {order.id} menjadi ({item_in_box.size[0]}, {item_in_box.size[1]}, {item_in_box.size[2]}), dan letakkan pada posisi : ({item_in_box.position[0]}, {item_in_box.position[1]}, {item_in_box.position[2]})\n")
+                                    if not os.path.exists(f"PackingResults/{vehicle.id}"):
+                                        os.makedirs(f"PackingResults/{vehicle.id}")
+                                    with open(f"PackingResults/{vehicle.id}/{order.id}-{itemindex + 1}.txt", "w") as file3:
+                                        file3.write(f"Siapkan Kardus ({itemindex + 1}) {item.name} untuk Order {order.id}\n")
+                                        for item_in_box_index in range(len(item.packed_items)):
+                                            item_in_box = item.packed_items[item_in_box_index]
+                                            file3.write(f"\t({item_in_box_index + 1}). Rotasi Obat {item_in_box.name} dari Order {order.id} menjadi ({item_in_box.size[0]}, {item_in_box.size[1]}, {item_in_box.size[2]}), dan letakkan pada posisi : ({item_in_box.position[0]}, {item_in_box.position[1]}, {item_in_box.position[2]})\n")
+                                            file4.write(f"\t({item_in_box_index + 1}). Obat {item_in_box.name}\n")
 
-                            elif isinstance(item, Medicine):
-                                itemtype = "Obat"
-                            file2.write(f"\t({itemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
+                                elif isinstance(item, Medicine):
+                                    itemtype = "Obat"
+                                    file4.write(f"({itemindex + 1}). Obat {item.name}\n")
+                                file2.write(f"\t({itemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
 
-                    file.write(f",{depot_coords[k][0]},{depot_coords[k][1]}\n")
+                    file.write(f",{depot_coords[k][0]},{depot_coords[k][1]},-1\n")
 
-
-
-                    it += 1
-
-        
-
-    '''
-    it = 1
-    for k in range(len(problems)):
-        solution = solutions[k]
-        problem = problems[k]
-        for i in range(solution.num_order):
-            customer_id = problem.order_list[i].customer_id
-            driver_id = None
-
-            for j in range(solution.num_vehicle):
-                c_tour_list = solution.tour_list[j]
-                if customer_id in c_tour_list:
-                    driver_id = j
-
-            
-
-            c_ep = solution.packing_position_list[i]
-
-            if len(c_ep) == 0:
-                continue
-
-            with open(f"PackingResults/{output_file_name}Driver{driver_id}.txt", "a") as file:
-                for j in range(len(c_ep)):
-                    file.write(f"Letakkan Item {j} pada posisi : ({c_ep[j][0]}, {c_ep[j][1]}, {c_ep[j][2]})\n")
-            it += 1
-    '''
 
 def parse_input(input_file_name="Dummy"):
     orders = {}

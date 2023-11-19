@@ -1,8 +1,0 @@
-Siapkan Kardus (1) 10UKDW004 untuk Order 35
-	(1). Rotasi Obat NONC045 dari Order 35 menjadi (20, 30, 40), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat PEDI065 dari Order 35 menjadi (15, 18, 5), dan letakkan pada posisi : (0, 0, 40)
-	(3). Rotasi Obat TECN043 dari Order 35 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 18, 40)
-	(4). Rotasi Obat TECN043 dari Order 35 menjadi (17, 11, 2), dan letakkan pada posisi : (0, 18, 42)
-	(5). Rotasi Obat HERB006 dari Order 35 menjadi (12, 8, 2), dan letakkan pada posisi : (0, 18, 44)
-	(6). Rotasi Obat VIAG002 dari Order 35 menjadi (7, 6, 2), dan letakkan pada posisi : (15, 0, 40)
-	(7). Rotasi Obat VIAG002 dari Order 35 menjadi (7, 6, 2), dan letakkan pada posisi : (15, 6, 40)

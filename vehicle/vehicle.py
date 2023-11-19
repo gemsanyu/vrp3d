@@ -22,10 +22,12 @@ class Vehicle:
                  cost_per_kg: int,
                  temp_class: int,
                  max_duration: int,
-                 vehicle_type: str):
+                 vehicle_type: str,
+                 id: int):
         self.vendor = vendor
         self.box = box 
         self.vehicle_type = vehicle_type
+        self.id = id
 
         self.cost_per_km = cost_per_km 
         self.cost_per_kg = cost_per_kg
@@ -56,7 +58,8 @@ def create_vehicle(vendor: str,
                     cost_per_kg: int,
                     temp_class: int,
                     max_duration: int,
-                    vehicle_type: str) -> Vehicle:
+                    vehicle_type: str,
+                    id: int) -> Vehicle:
     box = Box(box_size, box_max_weight, "BoxKendaraan", temperature=temp_class)
     return  Vehicle(vendor, 
                       box, 
@@ -64,5 +67,6 @@ def create_vehicle(vendor: str,
                       cost_per_kg, 
                       temp_class, 
                       max_duration,
-                      vehicle_type)
+                      vehicle_type,
+                      id)
                       

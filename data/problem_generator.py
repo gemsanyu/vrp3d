@@ -191,7 +191,8 @@ class MapData:
 
 
 class ProblemGenerator:
-    
+
+    KENDARAAN_COUNTER = 0
     ORDER_COUNTER = 0
     CUSTOMER_COUNTER = 0
 
@@ -267,7 +268,8 @@ class ProblemGenerator:
         temp = MasterKendaraan.get_random_vehicle()[1]
         size0, size1, size2 = int(float(temp["Panjang Cm"])), int(float(temp["Lebar Cm"])), int(float(temp["Tinggi Cm"]))
         size = np.asanyarray([size0,size1,size2], dtype=np.int64)
-        return create_vehicle(temp["Vendor"], size, int(float(temp["Max Berat Gram"])), int(float(temp["Cost Per KM"])), int(float(temp["Cost Per KG"])), TEMP_CLASS[temp["Kategori Pengiriman"]], int(float(temp["Max Duration"])), temp["Jenis Kendaraan"])
+        ProblemGenerator.KENDARAAN_COUNTER += 1
+        return create_vehicle(temp["Vendor"], size, int(float(temp["Max Berat Gram"])), int(float(temp["Cost Per KM"])), int(float(temp["Cost Per KG"])), TEMP_CLASS[temp["Kategori Pengiriman"]], int(float(temp["Max Duration"])), temp["Jenis Kendaraan"], ProblemGenerator.KENDARAAN_COUNTER)
 
 
     def generate_random_vehicles(number_of_vehicles):
