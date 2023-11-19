@@ -26,8 +26,8 @@ def compute_tour_list_length(distance_matrix:np.ndarray, tour_list:List[List[int
     return tour_list_length
 
 def compute_arrival_time_list(tour, distance_matrix, velocity):
-    tour_distance_list = sum([distance_matrix[tour[i]+1,tour[i-1]+1] for i in range(1,len(tour))])
-    tour_distance_list = [distance_matrix[0,tour[0]+1]] + tour_distance_list + distance_matrix[tour[-1]+1,0]
+    tour_distance_list = [distance_matrix[tour[i]+1,tour[i-1]+1] for i in range(1,len(tour))]
+    tour_distance_list = [distance_matrix[0,tour[0]+1]] + tour_distance_list + [distance_matrix[tour[-1]+1,0]]
     arrival_time_list = [tour_distance_list[i]/velocity for i in range(len(tour_distance_list))]
     for i in range(1,len(arrival_time_list)):
         arrival_time_list[i] += arrival_time_list[i-1]
