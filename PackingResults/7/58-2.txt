@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10UKSB001 untuk Order 58
-	(1). Rotasi Obat PROP002 dari Order 58 menjadi (7, 23, 15), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat BECE001 dari Order 58 menjadi (7, 19, 9), dan letakkan pada posisi : (0, 0, 15)

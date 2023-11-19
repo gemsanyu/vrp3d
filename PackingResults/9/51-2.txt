@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10UKPB01 untuk Order 51
-	(1). Rotasi Obat OPTI001 dari Order 51 menjadi (3, 6, 13), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat OPTI001 dari Order 51 menjadi (3, 6, 13), dan letakkan pada posisi : (3, 0, 0)

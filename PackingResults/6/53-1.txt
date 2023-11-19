@@ -1,8 +1,0 @@
-Siapkan Kardus (1) 10UKSW006 untuk Order 53
-	(1). Rotasi Obat PEDI070 dari Order 53 menjadi (13, 16, 13), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat GARN017 dari Order 53 menjadi (8, 14, 5), dan letakkan pada posisi : (0, 0, 13)
-	(3). Rotasi Obat STIM021 dari Order 53 menjadi (14, 6, 3), dan letakkan pada posisi : (0, 0, 18)
-	(4). Rotasi Obat TECN018 dari Order 53 menjadi (2, 11, 17), dan letakkan pada posisi : (13, 0, 0)
-	(5). Rotasi Obat ANTI025 dari Order 53 menjadi (3, 7, 2), dan letakkan pada posisi : (8, 0, 13)
-	(6). Rotasi Obat ANTI025 dari Order 53 menjadi (3, 7, 2), dan letakkan pada posisi : (8, 7, 13)
-	(7). Rotasi Obat ANTI025 dari Order 53 menjadi (3, 7, 2), dan letakkan pada posisi : (8, 0, 15)

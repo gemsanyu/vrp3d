@@ -1,6 +1,0 @@
-Siapkan Kardus (1) 10UKSW002 untuk Order 26
-	(1). Rotasi Obat SEDA001 dari Order 26 menjadi (11, 9, 4), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat TRIX003 dari Order 26 menjadi (13, 7, 3), dan letakkan pada posisi : (0, 0, 4)
-	(3). Rotasi Obat STIM018 dari Order 26 menjadi (6, 13, 5), dan letakkan pada posisi : (0, 0, 7)
-	(4). Rotasi Obat STIM018 dari Order 26 menjadi (6, 13, 5), dan letakkan pada posisi : (6, 0, 7)
-	(5). Rotasi Obat ILEV001 dari Order 26 menjadi (9, 4, 4), dan letakkan pada posisi : (0, 9, 0)

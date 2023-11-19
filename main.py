@@ -16,7 +16,7 @@ def run():
     orders = []
     vehicle_lists = []
     kode_cabangs = []
-    for i in range(3):
+    for i in range(1):
         kode_cabang, depot_coord1 = ProblemGenerator.get_random_depot()
         order_list1 = ProblemGenerator.generate_random_orders(20, 3, 10, kode_cabang)
         vehicle_list1 = ProblemGenerator.generate_random_vehicles(10)
@@ -53,6 +53,10 @@ def run():
                         
         solution = saving(problem)
         problem.reset(solution)
+        
+        solution = improve_tours_by_dp(solution, problem)
+        problem.reset(solution)
+        
         problems.append(problem)
         solutions.append(solution)
 

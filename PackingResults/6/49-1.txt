@@ -1,9 +1,0 @@
-Siapkan Kardus (1) 10UKSW063 untuk Order 49
-	(1). Rotasi Obat VENF014 dari Order 49 menjadi (17, 14, 11), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat VENF014 dari Order 49 menjadi (17, 14, 11), dan letakkan pada posisi : (0, 0, 11)
-	(3). Rotasi Obat LAMI011 dari Order 49 menjadi (10, 23, 6), dan letakkan pada posisi : (0, 0, 22)
-	(4). Rotasi Obat STER020 dari Order 49 menjadi (6, 15, 6), dan letakkan pada posisi : (10, 0, 22)
-	(5). Rotasi Obat TENS011 dari Order 49 menjadi (9, 9, 21), dan letakkan pada posisi : (0, 14, 0)
-	(6). Rotasi Obat VOTR001 dari Order 49 menjadi (7, 5, 10), dan letakkan pada posisi : (9, 14, 0)
-	(7). Rotasi Obat VOTR001 dari Order 49 menjadi (7, 5, 10), dan letakkan pada posisi : (9, 14, 10)
-	(8). Rotasi Obat RICO012 dari Order 49 menjadi (7, 4, 2), dan letakkan pada posisi : (9, 19, 0)

@@ -62,6 +62,6 @@ class VRP3D:
             self.vehicle_list[i].box.reset(packed_items, solution.ep_list[i])
 
             self.weight_cost_list[i] = self.vehicle_list[i].compute_weight_cost()
-            self.distance_cost_list = compute_tour_list_length(self.distance_matrix, solution.tour_list)
-
+            tour_list_length = compute_tour_list_length(self.distance_matrix, solution.tour_list)
+            self.distance_cost_list = [tour_list_length[i]*self.vehicle_list[i].cost_per_km for i in range(self.num_vehicle)]
         
