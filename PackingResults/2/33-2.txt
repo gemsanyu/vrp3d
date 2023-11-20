@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10UKSW268 untuk Order 33
-	(1). Rotasi Obat NONC048 dari Order 33 menjadi (30, 40, 20), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat NONC048 dari Order 33 menjadi (30, 40, 20), dan letakkan pada posisi : (0, 0, 20)

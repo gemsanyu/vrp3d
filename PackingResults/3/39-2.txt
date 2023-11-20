@@ -1,3 +1,0 @@
-Siapkan Kardus (2) 10UKPB02 untuk Order 39
-	(1). Rotasi Obat TASI003 dari Order 39 menjadi (5, 11, 7), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat TASI003 dari Order 39 menjadi (5, 11, 7), dan letakkan pada posisi : (0, 0, 7)

@@ -1,6 +1,0 @@
-Siapkan Kardus (1) 50PCSB01 untuk Order 36
-	(1). Rotasi Obat AMOS030 dari Order 36 menjadi (2, 11, 17), dan letakkan pada posisi : (0, 0, 0)
-	(2). Rotasi Obat TECN010 dari Order 36 menjadi (2, 11, 17), dan letakkan pada posisi : (2, 0, 0)
-	(3). Rotasi Obat TECN010 dari Order 36 menjadi (2, 11, 17), dan letakkan pada posisi : (4, 0, 0)
-	(4). Rotasi Obat ESOF001 dari Order 36 menjadi (3, 6, 3), dan letakkan pada posisi : (0, 0, 17)
-	(5). Rotasi Obat ESOF001 dari Order 36 menjadi (3, 6, 3), dan letakkan pada posisi : (3, 0, 17)
