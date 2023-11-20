@@ -1,0 +1,8 @@
+Siapkan Kardus (1) 10UKSW006 untuk Order 25
+	(1). Rotasi Obat MOPR001 dari Order 25 menjadi (7, 13, 18), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat MOPR001 dari Order 25 menjadi (7, 13, 18), dan letakkan pada posisi : (7, 0, 0)
+	(3). Rotasi Obat GRAV003 dari Order 25 menjadi (8, 7, 2), dan letakkan pada posisi : (0, 0, 18)
+	(4). Rotasi Obat GRAV003 dari Order 25 menjadi (8, 7, 2), dan letakkan pada posisi : (8, 0, 18)
+	(5). Rotasi Obat GRAV003 dari Order 25 menjadi (8, 7, 2), dan letakkan pada posisi : (0, 7, 18)
+	(6). Rotasi Obat AMOS032 dari Order 25 menjadi (2, 11, 17), dan letakkan pada posisi : (14, 0, 0)
+	(7). Rotasi Obat AMOS032 dari Order 25 menjadi (11, 2, 17), dan letakkan pada posisi : (0, 13, 0)

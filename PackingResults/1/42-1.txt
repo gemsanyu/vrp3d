@@ -1,0 +1,10 @@
+Siapkan Kardus (1) 10UKSB001 untuk Order 42
+	(1). Rotasi Obat SPOR005 dari Order 42 menjadi (6, 22, 6), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat SPOR005 dari Order 42 menjadi (6, 22, 6), dan letakkan pada posisi : (0, 0, 6)
+	(3). Rotasi Obat SPOR005 dari Order 42 menjadi (6, 22, 6), dan letakkan pada posisi : (0, 0, 12)
+	(4). Rotasi Obat STER020 dari Order 42 menjadi (6, 15, 6), dan letakkan pada posisi : (0, 0, 18)
+	(5). Rotasi Obat NEVO001 dari Order 42 menjadi (7, 12, 2), dan letakkan pada posisi : (0, 0, 24)
+	(6). Rotasi Obat BETA003 dari Order 42 menjadi (7, 12, 2), dan letakkan pada posisi : (0, 0, 26)
+	(7). Rotasi Obat IMAF001 dari Order 42 menjadi (6, 10, 3), dan letakkan pada posisi : (0, 0, 28)
+	(8). Rotasi Obat SIMV007 dari Order 42 menjadi (5, 8, 5), dan letakkan pada posisi : (0, 15, 18)
+	(9). Rotasi Obat SIMV007 dari Order 42 menjadi (5, 8, 5), dan letakkan pada posisi : (0, 15, 23)

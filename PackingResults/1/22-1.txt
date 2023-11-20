@@ -1,0 +1,10 @@
+Siapkan Kardus (1) 10UKSW302 untuk Order 22
+	(1). Rotasi Obat TELS001 dari Order 22 menjadi (12, 18, 7), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat TELS001 dari Order 22 menjadi (12, 18, 7), dan letakkan pada posisi : (0, 0, 7)
+	(3). Rotasi Obat TELS001 dari Order 22 menjadi (12, 18, 7), dan letakkan pada posisi : (0, 0, 14)
+	(4). Rotasi Obat BLDI002 dari Order 22 menjadi (5, 30, 25), dan letakkan pada posisi : (0, 0, 21)
+	(5). Rotasi Obat BLDI002 dari Order 22 menjadi (5, 30, 25), dan letakkan pada posisi : (5, 0, 21)
+	(6). Rotasi Obat HERB047 dari Order 22 menjadi (10, 7, 4), dan letakkan pada posisi : (0, 18, 0)
+	(7). Rotasi Obat HEPA013 dari Order 22 menjadi (8, 1, 42), dan letakkan pada posisi : (0, 30, 0)
+	(8). Rotasi Obat HEPA013 dari Order 22 menjadi (1, 8, 42), dan letakkan pada posisi : (10, 18, 0)
+	(9). Rotasi Obat HEPA013 dari Order 22 menjadi (1, 8, 42), dan letakkan pada posisi : (11, 18, 0)

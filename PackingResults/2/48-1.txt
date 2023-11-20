@@ -1,0 +1,6 @@
+Siapkan Kardus (1) 10BW03 untuk Order 48
+	(1). Rotasi Obat DELT055 dari Order 48 menjadi (5, 22, 22), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat STIM015 dari Order 48 menjadi (5, 13, 6), dan letakkan pada posisi : (0, 0, 22)
+	(3). Rotasi Obat STIM015 dari Order 48 menjadi (5, 13, 6), dan letakkan pada posisi : (0, 13, 22)
+	(4). Rotasi Obat STIM015 dari Order 48 menjadi (5, 13, 6), dan letakkan pada posisi : (0, 0, 28)
+	(5). Rotasi Obat REDA002 dari Order 48 menjadi (5, 13, 6), dan letakkan pada posisi : (0, 13, 28)

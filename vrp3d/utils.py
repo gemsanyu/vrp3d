@@ -10,7 +10,7 @@ from packing.packing import pack_items_to_boxes
 from vehicle.vehicle import Vehicle
 
 @nb.njit(float64(float64[:,:],int32[:]), cache=True)
-def compute_tour_length(distance_matrix:np.ndarray, tour:List[int]):
+def compute_tour_length(distance_matrix:np.ndarray, tour:np.ndarray):
     tour_length = 0
     for i in range(1,len(tour)):
         node_idx = tour[i] + 1

@@ -1,0 +1,11 @@
+Siapkan Kardus (1) 10UKSB001 untuk Order 37
+	(1). Rotasi Obat CEFI005 dari Order 37 menjadi (7, 21, 7), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat CEFI005 dari Order 37 menjadi (7, 21, 7), dan letakkan pada posisi : (0, 0, 7)
+	(3). Rotasi Obat CEFI005 dari Order 37 menjadi (7, 21, 7), dan letakkan pada posisi : (0, 0, 14)
+	(4). Rotasi Obat AMOG001 dari Order 37 menjadi (6, 23, 10), dan letakkan pada posisi : (0, 0, 21)
+	(5). Rotasi Obat MAYB061 dari Order 37 menjadi (2, 2, 11), dan letakkan pada posisi : (0, 21, 0)
+	(6). Rotasi Obat MAYB061 dari Order 37 menjadi (2, 2, 11), dan letakkan pada posisi : (2, 21, 0)
+	(7). Rotasi Obat MAYB061 dari Order 37 menjadi (2, 2, 11), dan letakkan pada posisi : (4, 21, 0)
+	(8). Rotasi Obat AMOL001 dari Order 37 menjadi (1, 1, 1), dan letakkan pada posisi : (6, 21, 0)
+	(9). Rotasi Obat AMOL001 dari Order 37 menjadi (1, 1, 1), dan letakkan pada posisi : (6, 22, 0)
+	(10). Rotasi Obat AMOL001 dari Order 37 menjadi (1, 1, 1), dan letakkan pada posisi : (6, 21, 1)

@@ -1,0 +1,5 @@
+Siapkan Kardus (1) 10UKDW005 untuk Order 46
+	(1). Rotasi Obat GARN050 dari Order 46 menjadi (29, 29, 45), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat ARIS002 dari Order 46 menjadi (16, 2, 6), dan letakkan pada posisi : (0, 29, 0)
+	(3). Rotasi Obat ARIS002 dari Order 46 menjadi (16, 2, 6), dan letakkan pada posisi : (0, 29, 6)
+	(4). Rotasi Obat ARIS002 dari Order 46 menjadi (16, 2, 6), dan letakkan pada posisi : (0, 29, 12)

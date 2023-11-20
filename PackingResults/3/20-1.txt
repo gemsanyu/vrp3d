@@ -1,0 +1,4 @@
+Siapkan Kardus (1) 10UKPB02 untuk Order 20
+	(1). Rotasi Obat VOTR002 dari Order 20 menjadi (5, 10, 7), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat VOTR002 dari Order 20 menjadi (5, 10, 7), dan letakkan pada posisi : (0, 0, 7)
+	(3). Rotasi Obat MAYB062 dari Order 20 menjadi (2, 2, 11), dan letakkan pada posisi : (0, 10, 0)

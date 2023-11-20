@@ -1,0 +1,3 @@
+Siapkan Kardus (2) 10UKPB02 untuk Order 25
+	(1). Rotasi Obat ACAR004 dari Order 25 menjadi (4, 12, 7), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat ACAR004 dari Order 25 menjadi (4, 12, 7), dan letakkan pada posisi : (0, 0, 7)

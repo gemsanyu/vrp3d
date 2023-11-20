@@ -1,0 +1,9 @@
+Siapkan Kardus (1) 10ARCHIVE01 untuk Order 50
+	(1). Rotasi Obat VSHM003 dari Order 50 menjadi (27, 34, 38), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat PROV001 dari Order 50 menjadi (17, 18, 7), dan letakkan pada posisi : (0, 0, 38)
+	(3). Rotasi Obat PROV001 dari Order 50 menjadi (17, 18, 7), dan letakkan pada posisi : (0, 18, 38)
+	(4). Rotasi Obat ATOR008 dari Order 50 menjadi (7, 16, 5), dan letakkan pada posisi : (17, 0, 38)
+	(5). Rotasi Obat RESO036 dari Order 50 menjadi (6, 5, 4), dan letakkan pada posisi : (17, 16, 38)
+	(6). Rotasi Obat RESO036 dari Order 50 menjadi (6, 5, 4), dan letakkan pada posisi : (17, 21, 38)
+	(7). Rotasi Obat RESO036 dari Order 50 menjadi (6, 5, 4), dan letakkan pada posisi : (17, 26, 38)
+	(8). Rotasi Obat MINO004 dari Order 50 menjadi (3, 8, 3), dan letakkan pada posisi : (24, 0, 38)

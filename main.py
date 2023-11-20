@@ -18,7 +18,7 @@ def run():
     kode_cabangs = []
     for i in range(1):
         kode_cabang, depot_coord1 = ProblemGenerator.get_random_depot()
-        order_list1 = ProblemGenerator.generate_random_orders(5, 3, 10, kode_cabang)
+        order_list1 = ProblemGenerator.generate_random_orders(50, 3, 10, kode_cabang)
         vehicle_list1 = ProblemGenerator.generate_random_vehicles(10)
         depot_coords.append(depot_coord1)
         orders.append(order_list1)

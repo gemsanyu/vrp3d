@@ -1,0 +1,9 @@
+Siapkan Kardus (1) 10UKPB07 untuk Order 26
+	(1). Rotasi Obat STER030 dari Order 26 menjadi (10, 16, 10), dan letakkan pada posisi : (0, 0, 0)
+	(2). Rotasi Obat STER030 dari Order 26 menjadi (10, 16, 10), dan letakkan pada posisi : (0, 0, 10)
+	(3). Rotasi Obat STER030 dari Order 26 menjadi (10, 16, 10), dan letakkan pada posisi : (0, 0, 20)
+	(4). Rotasi Obat MADU015 dari Order 26 menjadi (7, 5, 17), dan letakkan pada posisi : (0, 16, 0)
+	(5). Rotasi Obat REDD001 dari Order 26 menjadi (5, 7, 4), dan letakkan pada posisi : (0, 16, 17)
+	(6). Rotasi Obat REDD001 dari Order 26 menjadi (5, 7, 4), dan letakkan pada posisi : (0, 16, 21)
+	(7). Rotasi Obat REDD001 dari Order 26 menjadi (5, 7, 4), dan letakkan pada posisi : (0, 16, 25)
+	(8). Rotasi Obat LEVO004 dari Order 26 menjadi (5, 1, 11), dan letakkan pada posisi : (0, 21, 0)
