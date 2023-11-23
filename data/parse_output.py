@@ -81,12 +81,13 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
                     tempitems = sorted(tempitems, key=lambda item: item[0].insertion_order)
                     for tempitemindex in range(len(tempitems)):
                         item = tempitems[tempitemindex][0]
+                        orderid = tempitems[tempitemindex][1]
                         itemtype = None
                         if isinstance(item, Box):
                             itemtype = "Dus"
                         elif isinstance(item, Medicine):
                             itemtype = "Obat"
-                        file2.write(f"({tempitemindex + 1}). Rotasi {itemtype} {item.name} dari Order {order.id} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
+                        file2.write(f"({tempitemindex + 1}). Rotasi {itemtype} {item.name} dari Order {orderid} menjadi ({item.size[0]}, {item.size[1]}, {item.size[2]}), dan letakkan pada posisi : ({item.position[0]}, {item.position[1]}, {item.position[2]})\n")
 
                     file.write(f",{depot_coords[k][0]},{depot_coords[k][1]},-1\n")
 
@@ -104,7 +105,8 @@ def parse_input(input_file_name="Dummy"):
                 r = MasterRelasi.get_relasi(cells[1])
                 # list medicine, list quantity, koordinat relasi, id cabang, costumer id
                 orders[cells[0]] = [[], [], (r["Latitude"], r["Longitude"]), cells[4], cells[1]]
-            orders[cells[0]][0].append(ProblemGenerator.generate_medicine(cells[2], cells[0], cells[1], 0))
+            tempmed = ProblemGenerator.generate_medicine(cells[2], cells[0], cells[1], 0)
+            orders[cells[0]][0].append(copy.deepcopy(tempmed))
             orders[cells[0]][1].append(cells[3])
     
     orders_per_cabang = {}
@@ -115,21 +117,28 @@ def parse_input(input_file_name="Dummy"):
         medscopy = []
         for med in range(len(item[1][0])):
             for i in range(int(item[1][1][med])):
-                medscopy.append(copy.deepcopy(item[1][0][med]))
-        
+                medcopy = copy.deepcopy(item[1][0][med])
+                medscopy.append(medcopy)
         orders_per_cabang[item[1][3]].append(Order(item[0], item[1][4], medscopy, item[1][2]))
 
     cabang_coordinates = {}
+    cabang_codes = {}
     for key in orders_per_cabang.keys():
         cabang_coordinates[key] = MasterCabang.get_depot_coordinate(key)
+        cabang_codes[key] = MasterCabang.get_depot_code(key)
 
+
+    
     cabang_coordinates_ret = []
     orders_ret = []
+    cabang_codes_ret = []
     for key in orders_per_cabang.keys():
         orders_ret.append(orders_per_cabang[key])
         cabang_coordinates_ret.append(cabang_coordinates[key])
+        cabang_codes_ret.append(cabang_codes[key])
 
-    return cabang_coordinates_ret, orders_ret
+    return cabang_coordinates_ret, orders_ret, cabang_codes_ret
+    #return cabang_coordinates.values(), orders_per_cabang.values(), cabang_codes.values()
 
 
 
