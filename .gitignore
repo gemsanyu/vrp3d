@@ -1,3 +1,7 @@
 *__pycache__*
 *.html
 *_frames
+data/*
+!data/*.py
+Dummy*
+PackingResults/*
