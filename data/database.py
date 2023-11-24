@@ -14,6 +14,7 @@ from order.order import Order
 from vehicle.vehicle import create_vehicle
 from vrp3d.vrp3d import VRP3D
 
+import re
 
 
 import mysql.connector
@@ -139,6 +140,7 @@ class DBVehicle:
         self.vendor = db_result[9]
         self.max_duration = db_result[10]
         self.driver_id = db_result[11]
+        self.branch_id = db_result[12]
 
     def dump(self):
         return (
@@ -154,6 +156,7 @@ class DBVehicle:
             self.vendor,
             self.max_duration,
             self.driver_id,
+            self.branch_id
         )
 
 
@@ -224,21 +227,25 @@ class DBAvailableVehicle:
             self.available_date,
         )
 
-class DBDeliveryOrder:
+class DBShipment:
     def __init__(self, db_result: Tuple):
         self.id = db_result[0]
-        self.driver_id = db_result[1]
+        self.vehicle_id = db_result[1]
         self.branch_id = db_result[2]
         self.dispatch_date = db_result[3]
         self.status = db_result[4]
+        self.distance_cost = db_result[5]
+        self.weight_cost = db_result[6]
 
     def dump(self):
         return (
             self.id,
-            self.driver_id,
+            self.vehicle_id,
             self.branch_id,
             self.dispatch_date,
-            self.status
+            self.status,
+            self.distance_cost,
+            self.weight_cost
         )
 
 class DBOrders:
@@ -246,14 +253,16 @@ class DBOrders:
         self.id = db_result[0]
         self.relation_id = db_result[1]
         self.branch_id = db_result[2]
-        self.delivery_order_id = db_result[3]
+        self.shipment_id = db_result[3]
+        self.status = db_result[4]
 
     def dump(self):
         return (
             self.id,
             self.relation_id,
             self.branch_id,
-            self.delivery_order_id,
+            self.shipment_id,
+            self.status
         )
 
 class DBOrderDetail:
@@ -267,6 +276,19 @@ class DBOrderDetail:
             self.order_id,
             self.product_id,
             self.quantity
+        )
+    
+class DBOrderDetailMishap:
+    def __init__(self, db_result: Tuple):
+        self.order_id = db_result[0]
+        self.product_id = db_result[1]
+        self.quantity_delivered = db_result[2]
+
+    def dump(self):
+        return (
+            self.order_id,
+            self.product_id,
+            self.quantity_delivered
         )
 
 class DBRouteData:
@@ -316,7 +338,7 @@ class Database:
     DELIVERY_CATEGORY = "DELIVERYCATEGORY"
     DRIVER = "DRIVER"
     AVAILABLE_VEHICLE = "AVAILABLEVEHICLE"
-    DELIVERY_ORDER = "DELIVERYORDER"
+    SHIPMENT = "SHIPMENT"
     ORDERS = "ORDERS"
     ORDER_DETAIL = "ORDERDETAIL"
     ROUTE_DATA = "ROUTEDATA"
@@ -331,7 +353,7 @@ class Database:
         DELIVERY_CATEGORY : DBDeliveryCategory,
         DRIVER : DBDriver,
         AVAILABLE_VEHICLE : DBAvailableVehicle,
-        DELIVERY_ORDER : DBDeliveryOrder,
+        SHIPMENT : DBShipment,
         ORDERS : DBOrders,
         ORDER_DETAIL : DBOrderDetail,
         ROUTE_DATA : DBRouteData,
@@ -342,7 +364,7 @@ class Database:
     ORDER_ID = "ORDER_ID"
     PRODUCT_ID = "PRODUCT_ID"
     RELATION_ID = "RELATION_ID"
-    DELIVERY_ORDER_ID = "DELIVERY_ORDER_ID"
+    SHIPMENT_ID = "SHIPMENT_ID"
     BRANCH_ID = "BRANCH_ID"
 
 
@@ -357,11 +379,26 @@ class Database:
         
         Database.Cursor = Database.Database.cursor()
 
+    def Rebuild():
+        fd = open('data/MediTransitInit.sql', 'r')
+        sqlFile = fd.read()
+        fd.close()
+
+        sqlCommands = sqlFile.split(';')
+
+        for command in sqlCommands:
+            Database.Cursor.execute(command)
+        Database.Database.commit()
+        
+
     def dump_to_database(table, entries):
         for entry in entries:
             temp = ""
             for attr in entry:
-                temp += "'" + str(attr) + "',"
+                if attr is not None:
+                    temp += "'" + str(attr) + "',"
+                else:
+                    temp += "NULL,"
             Database.Cursor.execute(f"insert into {table} values ({temp[:-1]})")
         Database.Database.commit()
 
@@ -397,16 +434,14 @@ class Database:
         return myresult
     
 
-    def get_by_foreign_keys(table, foreign_key_strings, foreign_keys):
+    def get_by_columns(table, column_strings, columns):
         temp = ""
-        for i, foreign_key_string in enumerate(foreign_key_strings):
-            temp += foreign_key_string + " in (" 
-            for foreign_key in foreign_keys[i]:
-                temp += "'" + str(foreign_key) + "',"
+        for i, column_string in enumerate(column_strings):
+            temp += column_string + " in (" 
+            for column in columns[i]:
+                temp += "'" + str(column) + "',"
             temp = temp[:-1] + ") and "
         temp = temp[:-6] + ")"
-        print(temp)
-        print(f"select * from {table} where {temp}")
         Database.Cursor.execute(f"select * from {table} where {temp}")
         myresult = Database.Cursor.fetchall()
         
@@ -417,13 +452,44 @@ class Database:
         return ret
     
 
+    def update(table, column_strings, columns, new_columns, new_values):
+        temp2 = ""
+        for i, new_col in enumerate(new_columns):
+            temp2 += new_col + "='" + str(new_values[i]) + "',"
+        temp2 = temp2[:-1]
+
+        temp = ""
+        for i, column_string in enumerate(column_strings):
+            temp += column_string + " in (" 
+            for column in columns[i]:
+                temp += "'" + str(column) + "',"
+            temp = temp[:-1] + ") and "
+        temp = temp[:-6] + ")"
+        Database.Cursor.execute(f"update {table} set {temp2} where {temp}")
+        Database.Database.commit()
     
-    
+
+    def delete(table, column_strings, columns):
+        temp = ""
+        for i, column_string in enumerate(column_strings):
+            temp += column_string + " in (" 
+            for column in columns[i]:
+                temp += "'" + str(column) + "',"
+            temp = temp[:-1] + ") and "
+        temp = temp[:-6] + ")"
+        Database.Cursor.execute(f"delete from {table} where {temp}")
+        Database.Database.commit()
+
     def random_depot():
         depot = random.choice(Database.get_all(Database.BRANCH))
         coord = [depot.latitude, depot.longitude]
-        kode_cabang = depot.code
-        return kode_cabang, coord
+        return depot.id, coord
+    
+    def get_depots_coords(ids):
+        depot = Database.get_by_ids(Database.BRANCH, ids)
+        ret = [(d.latitude, d.longitude) for d in depot]
+        return ret
+
     
     def get_medicine(product_id, order_id, customer_id, number):
         med = Database.get_by_ids(Database.PRODUCT, [product_id])[0]
@@ -434,40 +500,52 @@ class Database:
     def random_medicine(order_id, customer_id, number): 
         med = random.choice(Database.get_all(Database.PRODUCT))
         size = np.asanyarray([med.length,med.width,med.height], dtype=np.int64)
-        print(med.delivery_category)
         return Medicine(med.id, str(order_id), str(customer_id), str(med.id), number, med.UOM, size, int(float(med.weight)), TEMP_CLASS[med.delivery_category])
     
     def random_medicines(number_of_medicines, order_id, customer_id, number):
         return [Database.random_medicine(order_id, customer_id, number) for i in range(number_of_medicines)]
 
-
-
-    def random_order(max_each_quantity, max_total_quantity, kode_cabang):
+    def generate_random_order(max_each_quantity, max_total_quantity):
         customer = random.choice(Database.get_all(Database.RELATION))
-        items = []
         sum_quantity = 0
         last_order_id = Database.get_max_id(Database.ORDERS) + 1
+
+        db_order = (last_order_id, customer.id, customer.branch_id, None, "Pending")
+
+        Database.dump_to_database(Database.ORDERS, [db_order])
         while sum_quantity < max_total_quantity:
             current_quantity = min(max_total_quantity - sum_quantity, random.randint(1, max_each_quantity))
             sum_quantity += current_quantity
             med = Database.random_medicine(last_order_id, customer.id, 0)
-            for i in range(current_quantity):
-                new_med = copy.deepcopy(med)
-                new_med.number = i
-                items.append(copy.deepcopy(new_med))
-        return Order(last_order_id, customer.id, items, (customer.latitude, customer.longitude))
+            db_orderdetail = (last_order_id, med.id, current_quantity)
+            Database.dump_to_database(Database.ORDER_DETAIL, [db_orderdetail])
 
-    def random_orders(number_of_orders, max_each_quantity, max_total_quantity, kode_cabang):
-        return [Database.random_order(max_each_quantity, max_total_quantity, kode_cabang) for i in range(number_of_orders)]
+    def generate_random_orders(number_of_orders, max_each_quantity, max_total_quantity):
+        return [Database.generate_random_order(max_each_quantity, max_total_quantity) for i in range(number_of_orders)]
+
+    def get_pending_orders():
+        db_orders = Database.get_by_columns(Database.ORDERS, ["status"], [["Pending", "Not-Sent"]])
+        orders = []
+        for db_order in db_orders:
+            db_orderdetails =  Database.get_by_columns(Database.ORDER_DETAIL, ["order_id"], [[db_order.id]])
+            meds = []
+            it = 1
+            for db_orderdetail in db_orderdetails:
+                med = Database.get_by_columns(Database.PRODUCT, ["id"], [[db_orderdetail.product_id]])[0]
+                size = np.asanyarray([med.length,med.width,med.height], dtype=np.int64)
+                medtemp = Medicine(med.id, str(db_order.id), str(db_order.relation_id), str(med.id), it, med.UOM, size, int(float(med.weight)), TEMP_CLASS[med.delivery_category])
+                for k in range(db_orderdetail.quantity):
+                    medtemp2 = copy.deepcopy(medtemp)
+                    medtemp2.number = it
+                    it += 1
+                    meds.append(medtemp2)
+            db_customer = Database.get_by_columns(Database.RELATION, ["id"], [[db_order.relation_id]])[0]
+            orders.append(Order(db_order.id, db_order.relation_id, meds, (db_customer.latitude, db_customer.longitude)))
+
+        return orders
 
 
-    def random_available_vehicles(number_of_vehicles):
-        vehicles = Database.get_all(Database.AVAILABLE_VEHICLE)
-        random.shuffle(vehicles)
-        vehicles2 = Database.get_by_foreign_keys(Database.VEHICLE, ["ID"], [[vec.vehicle_id for vec in vehicles]])
-        vecs = [create_vehicle(vec.vendor, np.asanyarray([vec.length,vec.width,vec.height], dtype=np.int64), 
-                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles2[:number_of_vehicles]]
-        return vecs
+
     
     def random_dus():
         dus = random.choice(Database.get_all(Database.CARDBOARD_BOX))
@@ -490,7 +568,16 @@ class Database:
 
 
     def generate_available_vehicles(number_of_vehicle):
-        vehicles = Database.get_all(Database.VEHICLE)
+        vehicles = []
+        Database.Cursor.execute(f"select * from Vehicle where Vehicle.id not in (select vehicle_id from AvailableVehicle)")
+        myresult = Database.Cursor.fetchall()
+        
+        vehicles = []
+        for res in myresult:
+            vehicles.append(DBVehicle(res))
+
+        #vehicles = Database.get_all(Database.VEHICLE)
+        
         random.shuffle(vehicles)
         generated_vehicles = vehicles[:number_of_vehicle]
 
@@ -499,10 +586,67 @@ class Database:
             avail_vehicle = DBAvailableVehicle((last_avail_vehicle_id, vehicle.id, datetime.now())).dump()
             last_avail_vehicle_id += 1
             Database.dump_to_database(Database.AVAILABLE_VEHICLE, [avail_vehicle])
+
+    def get_available_vehicles():
+        vehicles = Database.get_all(Database.AVAILABLE_VEHICLE)
+        vehicles2 = Database.get_by_columns(Database.VEHICLE, ["ID"], [[vec.vehicle_id for vec in vehicles]])
+        vecs = [create_vehicle(vec.vendor, np.asanyarray([vec.length,vec.width,vec.height], dtype=np.int64), 
+                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles2]
+        return vecs
         
+    def get_available_vehicles_by_branch(branch_id):
+        vehicles = Database.get_all(Database.AVAILABLE_VEHICLE)
+        vehicles2 = Database.get_by_columns(Database.VEHICLE, ["ID"], [[vec.vehicle_id for vec in vehicles]])
+        vehicles3 = []
+        for vec in vehicles2:
+            if vec.branch_id == branch_id:
+                vehicles3.append(vec)
+        vecs = [create_vehicle(vec.vendor, np.asanyarray([vec.length,vec.width,vec.height], dtype=np.int64), 
+                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles3]
+        return vecs
 
 
-    def generate_problem(number_of_vehicles, number_of_orders, max_each_quantity, max_total_quantity):
-        return VRP3D(ProblemGenerator.generate_random_vehicles(number_of_vehicles), ProblemGenerator.generate_random_orders(number_of_orders, max_each_quantity, max_total_quantity), MapData.get_random_depot())
+    def get_fast_moving_products():
+        Database.Cursor.execute(f"select Product.id, Product.code, Product.HNA, Product.HET, Product.UOM, Product.weight, \
+                                Product.length, Product.width, Product.height, Product.is_life_saving, Product.volume, Product.delivery_category, count(*) \
+                                from Product inner join OrderDetail on Product.id = OrderDetail.product_id \
+                                group by Product.id order by count(*)")
+        myresult = Database.Cursor.fetchall()
         
+        ret = []
+        for res in myresult:
+            ret.append((Database.DBType[Database.PRODUCT](res[:-1]), res[-1]))
 
+        for res in ret:
+            print(res[0], res[1])
+
+        return ret
+    
+    def deliver_orders(problems, solutions):
+        for i in range(len(solutions)):
+            solution = solutions[i]
+            problem = problems[i]
+            branch_id = problem.depot_id
+            last_do_id = Database.get_max_id(Database.SHIPMENT) + 1
+            for j in range(solution.num_vehicle):
+                c_tour_list = solution.tour_list[j]
+                if len(c_tour_list) == 0:
+                   continue
+                vec = problem.vehicle_list[j]
+                db_do = DBShipment((last_do_id, vec.id, branch_id, datetime.now(), "On-Delivery", problem.distance_cost_list[j], problem.weight_cost_list[j]))
+                Database.dump_to_database(Database.SHIPMENT, [db_do.dump()])
+                last_do_id += 1
+
+                Database.delete(Database.AVAILABLE_VEHICLE, ["vehicle_id"], [[int(vec.id)]])
+
+                for tour in c_tour_list:
+                    order = problem.order_list[tour]
+                    Database.update(Database.ORDERS, ["id"], [[int(order.id)]], ["status", "shipment_id"], ["On-Delivery", db_do.id])
+        
+        # change the status of unsent orders to "Not-Sent"
+        Database.update(Database.ORDERS, ["status"], [["Pending"]], ["status"], ["Not-Sent"])
+
+
+    #def generate_problem(number_of_vehicles, number_of_orders, max_each_quantity, max_total_quantity):
+    #    return VRP3D(ProblemGenerator.generate_random_vehicles(number_of_vehicles), ProblemGenerator.generate_random_orders(number_of_orders, max_each_quantity, max_total_quantity), MapData.get_random_depot())
+        

@@ -13,8 +13,7 @@ from data.database import Database
 
 def run():
     Database.Initialize()
-    Database.generate_random_orders(9, 3, 10)
-    Database.generate_available_vehicles(10)
+    
 
     # map id cabang ke list of order
     o_map = {}
