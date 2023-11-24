@@ -550,7 +550,26 @@ class Database:
 
         return orders
 
+    def get_orders_by_ids(ids):
+        db_orders = Database.get_by_ids(Database.ORDERS, ids)
+        orders = []
+        for db_order in db_orders:
+            db_orderdetails =  Database.get_by_columns(Database.ORDER_DETAIL, ["order_id"], [[db_order.id]])
+            meds = []
+            it = 1
+            for db_orderdetail in db_orderdetails:
+                med = Database.get_by_columns(Database.PRODUCT, ["id"], [[db_orderdetail.product_id]])[0]
+                size = np.asanyarray([med.length,med.width,med.height], dtype=np.int64)
+                medtemp = Medicine(med.id, str(db_order.id), str(db_order.relation_id), str(med.id), it, med.UOM, size, int(float(med.weight)), TEMP_CLASS[med.delivery_category])
+                for k in range(db_orderdetail.quantity):
+                    medtemp2 = copy.deepcopy(medtemp)
+                    medtemp2.number = it
+                    it += 1
+                    meds.append(medtemp2)
+            db_customer = Database.get_by_columns(Database.RELATION, ["id"], [[db_order.relation_id]])[0]
+            orders.append(Order(db_order.id, db_order.relation_id, meds, (db_customer.latitude, db_customer.longitude)))
 
+        return orders
 
     
     def random_dus():
