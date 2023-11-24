@@ -1,5 +1,6 @@
 
 
+
 drop database if exists MediTransit;
 
 create database MediTransit;
@@ -9,7 +10,6 @@ use MediTransit;
 set sql_safe_updates = 0;
 SET GLOBAL local_infile='ON';
 SET GLOBAL log_bin_trust_function_creators = 1;
-
 
 -- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
 --
@@ -147,12 +147,14 @@ DROP TABLE IF EXISTS `deliverytrouble`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deliverytrouble` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `driver_id` int DEFAULT NULL,
+  `vehicle_id` int DEFAULT NULL,
   `trouble_type` enum('Traffic Accident','Traffic Congestion','Others') DEFAULT NULL,
   `details` varchar(255) DEFAULT NULL,
+  `status` enum('Urgent','Resolved') DEFAULT NULL,
+  `event_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `driver_id` (`driver_id`),
-  CONSTRAINT `deliverytrouble_ibfk_1` FOREIGN KEY (`driver_id`) REFERENCES `driver` (`id`)
+  KEY `vehicle_id` (`vehicle_id`),
+  CONSTRAINT `deliverytrouble_ibfk_1` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -356,16 +358,16 @@ DROP TABLE IF EXISTS `routedata`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `routedata` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `driver_id` int DEFAULT NULL,
-  `visitation_order` int DEFAULT NULL,
   `relation_id` int DEFAULT NULL,
+  `shipment_id` int DEFAULT NULL,
+  `visitation_order` int DEFAULT NULL,
   `departure_time` datetime DEFAULT NULL,
   `delivered_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `relation_id` (`relation_id`),
-  KEY `driver_id` (`driver_id`),
+  KEY `shipment_id` (`shipment_id`),
   CONSTRAINT `routedata_ibfk_1` FOREIGN KEY (`relation_id`) REFERENCES `relation` (`id`),
-  CONSTRAINT `routedata_ibfk_2` FOREIGN KEY (`driver_id`) REFERENCES `driver` (`id`)
+  CONSTRAINT `routedata_ibfk_2` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -460,4 +462,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-24 14:44:22
+-- Dump completed on 2023-11-24 18:43:23

@@ -294,16 +294,18 @@ class DBOrderDetailMishap:
 class DBRouteData:
     def __init__(self, db_result: Tuple):
         self.id = db_result[0]
-        self.visitation_order = db_result[1]
-        self.relation_id = db_result[2]
-        self.departure_time = db_result[3]
-        self.delivered_time = db_result[4]
+        self.relation_id = db_result[1]
+        self.shipment_id = db_result[2]
+        self.visitation_order = db_result[3]
+        self.departure_time = db_result[4]
+        self.delivered_time = db_result[5]
 
     def dump(self):
         return (
             self.id,
-            self.visitation_order,
             self.relation_id,
+            self.shipment_id,
+            self.visitation_order,
             self.departure_time,
             self.delivered_time
         )
@@ -311,16 +313,20 @@ class DBRouteData:
 class DBDeliveryTrouble:
     def __init__(self, db_result: Tuple):
         self.id = db_result[0]
-        self.driver_id = db_result[1]
+        self.vehicle_id = db_result[1]
         self.trouble_type = db_result[2]
         self.details = db_result[3]
+        self.status = db_result[4]
+        self.event_time = db_result[5]
 
     def dump(self):
         return (
             self.id,
-            self.driver_id,
+            self.vehicle_id,
             self.trouble_type,
-            self.details
+            self.details,
+            self.status,
+            self.event_time
         )
 
 
@@ -628,6 +634,7 @@ class Database:
             problem = problems[i]
             branch_id = problem.depot_id
             last_do_id = Database.get_max_id(Database.SHIPMENT) + 1
+            last_route_data_id = Database.get_max_id(Database.ROUTE_DATA) + 1
             for j in range(solution.num_vehicle):
                 c_tour_list = solution.tour_list[j]
                 if len(c_tour_list) == 0:
@@ -639,9 +646,14 @@ class Database:
 
                 Database.delete(Database.AVAILABLE_VEHICLE, ["vehicle_id"], [[int(vec.id)]])
 
+                k = 1
                 for tour in c_tour_list:
                     order = problem.order_list[tour]
                     Database.update(Database.ORDERS, ["id"], [[int(order.id)]], ["status", "shipment_id"], ["On-Delivery", db_do.id])
+
+                    Database.dump_to_database(Database.ROUTE_DATA, [DBRouteData((last_route_data_id, order.customer_id, db_do.id, k, None, None)).dump()])
+                    k += 1
+                    last_route_data_id += 1
         
         # change the status of unsent orders to "Not-Sent"
         Database.update(Database.ORDERS, ["status"], [["Pending"]], ["status"], ["Not-Sent"])
