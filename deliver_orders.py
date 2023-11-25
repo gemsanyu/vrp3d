@@ -1,3 +1,4 @@
+import datetime
 from random import seed
 
 from item.box import Box
@@ -66,5 +67,5 @@ def run():
 
 
 if __name__ == "__main__":
-    seed(20)
+    seed(datetime.datetime.now().timestamp())
     run()

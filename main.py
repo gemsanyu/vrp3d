@@ -1,4 +1,5 @@
 from random import seed
+import datetime
 
 from item.box import Box
 from data.problem_generator import ProblemGenerator
@@ -67,5 +68,5 @@ def run():
 
 
 if __name__ == "__main__":
-    seed(20)
+    seed(datetime.datetime.now().timestamp())
     run()
