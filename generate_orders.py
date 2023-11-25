@@ -7,7 +7,7 @@ from data.database import Database
 def run():
     Database.Initialize()
     
-    Database.generate_random_orders(9, 3, 10)
+    Database.generate_random_orders(9, 10, 150)
 
 
 if __name__ == "__main__":

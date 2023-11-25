@@ -348,12 +348,18 @@ class DBCardboardBoxInstance:
         self.id = db_result[0]
         self.product_id = db_result[1]
         self.order_id = db_result[2]
+        self.size_x = db_result[3]
+        self.size_y = db_result[4]
+        self.size_z = db_result[5]
 
     def dump(self):
         return (
             self.id,
             self.product_id,
-            self.order_id
+            self.order_id,
+            self.size_x,
+            self.size_y,
+            self.size_z
         )
     
 
@@ -642,6 +648,7 @@ class Database:
             med = Database.random_medicine(last_order_id, customer.id, 0)
             while med.id in used_product_ids:
                 med = Database.random_medicine(last_order_id, customer.id, 0)
+            used_product_ids.append(med.id)
             db_orderdetail = (last_order_id, med.id, current_quantity)
             Database.dump_to_database(Database.ORDER_DETAIL, [db_orderdetail])
 
@@ -800,13 +807,20 @@ class Database:
                         last_cb_instance_id = Database.get_max_id(Database.CARDBOARDBOX_INSTANCE) + 1
                         order_id = item.packed_items[0].order_id
                         item_id = item.id.split('-')[-1]
-                        cb_instance = DBCardboardBoxInstance((last_cb_instance_id, item_id, order_id))
+                        cb_instance = DBCardboardBoxInstance((last_cb_instance_id, item_id, order_id,
+                                                              item.alternative_sizes[0][0], item.alternative_sizes[0][1], item.alternative_sizes[0][2]))
                         packing_cbv_instance = DBPackingCardboardBoxVehicle((last_do_id, last_cb_instance_id, insertion_order + 1, 
                                                       positions[insertion_order][0], positions[insertion_order][1], positions[insertion_order][2], 
                                                       sizes[insertion_order][0], sizes[insertion_order][1], sizes[insertion_order][2]
                                                       ))
                         Database.dump_to_database(Database.CARDBOARDBOX_INSTANCE, [cb_instance.dump()])
                         Database.dump_to_database(Database.PACKING_CARDBOARDBOX_VEHICLE, [packing_cbv_instance.dump()])
+                        tempsss = Database.get_by_ids(Database.CARDBOARD_BOX, [item_id])[0]
+                        print(f"orisize = {item.original_size}")
+                        print(f"rotatesize = {item.size}")
+                        print(f"altsize = {item.alternative_sizes[0]}")
+                        print(f"dbsize = {tempsss.dump()}")
+
                         med_positions, med_sizes = item.generate_packing_information()
                         for med_insertion_order, med in enumerate(item.packed_items):
                             last_prod_instance_id = Database.get_max_id(Database.PRODUCT_INSTANCE) + 1
@@ -815,6 +829,7 @@ class Database:
                                                                         med_positions[med_insertion_order][0], med_positions[med_insertion_order][1], med_positions[med_insertion_order][2], 
                                                                         med_sizes[med_insertion_order][0], med_sizes[med_insertion_order][1], med_sizes[med_insertion_order][2]
                                                                         ))
+                            print(f"\tmedsize = {med_sizes[med_insertion_order]}")
                             Database.dump_to_database(Database.PRODUCT_INSTANCE, [prod_instance.dump()])
                             Database.dump_to_database(Database.PACKING_PRODUCT_CARDBOARDBOX, [packing_mcb_instance.dump()])
 
