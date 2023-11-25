@@ -98,7 +98,7 @@ CREATE TABLE `cardboardbox` (
   `max_weight` double DEFAULT NULL,
   `details` longtext,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -130,7 +130,7 @@ CREATE TABLE `cardboardboxinstance` (
   KEY `order_id` (`order_id`),
   CONSTRAINT `cardboardboxinstance_ibfk_1` FOREIGN KEY (`cardboardbox_id`) REFERENCES `cardboardbox` (`id`),
   CONSTRAINT `cardboardboxinstance_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -155,7 +155,7 @@ CREATE TABLE `deliverycategory` (
   `temperature_min` double DEFAULT NULL,
   `temperature_max` double DEFAULT NULL,
   PRIMARY KEY (`delivery_category`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -185,7 +185,7 @@ CREATE TABLE `deliverytrouble` (
   PRIMARY KEY (`id`),
   KEY `vehicle_id` (`vehicle_id`),
   CONSTRAINT `deliverytrouble_ibfk_1` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,7 +208,7 @@ CREATE TABLE `driver` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +236,7 @@ CREATE TABLE `orderdetail` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `orderdetail_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -263,7 +263,7 @@ CREATE TABLE `orderdetailmishap` (
   KEY `product_id` (`product_id`),
   CONSTRAINT `orderdetailmishap_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
   CONSTRAINT `orderdetailmishap_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,7 +291,7 @@ CREATE TABLE `orders` (
   PRIMARY KEY (`id`),
   KEY `shipment_id` (`shipment_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -324,7 +324,7 @@ CREATE TABLE `packingcardboardboxvehicle` (
   KEY `cardboardbox_instance_id` (`cardboardbox_instance_id`),
   CONSTRAINT `packingcardboardboxvehicle_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`),
   CONSTRAINT `packingcardboardboxvehicle_ibfk_2` FOREIGN KEY (`cardboardbox_instance_id`) REFERENCES `cardboardboxinstance` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -357,7 +357,7 @@ CREATE TABLE `packingproductcardboardbox` (
   KEY `product_instance_id` (`product_instance_id`),
   CONSTRAINT `packingproductcardboardbox_ibfk_1` FOREIGN KEY (`cardboardbox_instance_id`) REFERENCES `cardboardboxinstance` (`id`),
   CONSTRAINT `packingproductcardboardbox_ibfk_2` FOREIGN KEY (`product_instance_id`) REFERENCES `productinstance` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -390,7 +390,7 @@ CREATE TABLE `packingproductvehicle` (
   KEY `product_instance_id` (`product_instance_id`),
   CONSTRAINT `packingproductvehicle_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`),
   CONSTRAINT `packingproductvehicle_ibfk_2` FOREIGN KEY (`product_instance_id`) REFERENCES `productinstance` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -425,7 +425,7 @@ CREATE TABLE `product` (
   PRIMARY KEY (`id`),
   KEY `delivery_category` (`delivery_category`),
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`delivery_category`) REFERENCES `deliverycategory` (`delivery_category`)
-) ENGINE=InnoDB AUTO_INCREMENT=4096 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4096 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -454,7 +454,7 @@ CREATE TABLE `productinstance` (
   KEY `order_id` (`order_id`),
   CONSTRAINT `productinstance_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   CONSTRAINT `productinstance_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -491,7 +491,7 @@ CREATE TABLE `relation` (
   PRIMARY KEY (`id`),
   KEY `branch_id` (`branch_id`),
   CONSTRAINT `relation_ibfk_1` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16384 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16384 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -525,7 +525,7 @@ CREATE TABLE `routedata` (
   KEY `shipment_id` (`shipment_id`),
   CONSTRAINT `routedata_ibfk_1` FOREIGN KEY (`relation_id`) REFERENCES `relation` (`id`),
   CONSTRAINT `routedata_ibfk_2` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -557,7 +557,7 @@ CREATE TABLE `shipment` (
   KEY `branch_id` (`branch_id`),
   CONSTRAINT `shipment_ibfk_1` FOREIGN KEY (`vehicle_id`) REFERENCES `vehicle` (`id`),
   CONSTRAINT `shipment_ibfk_2` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -597,7 +597,7 @@ CREATE TABLE `vehicle` (
   CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`delivery_category`) REFERENCES `deliverycategory` (`delivery_category`),
   CONSTRAINT `vehicle_ibfk_2` FOREIGN KEY (`driver_id`) REFERENCES `driver` (`id`),
   CONSTRAINT `vehicle_ibfk_3` FOREIGN KEY (`branch_id`) REFERENCES `branch` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=81 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
