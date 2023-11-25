@@ -1,4 +1,5 @@
 from random import seed
+import datetime
 
 from item.box import Box
 from data.problem_generator import ProblemGenerator
@@ -63,9 +64,9 @@ def run():
         solutions.append(solution)
 
     Database.deliver_orders(problems, solutions)
-    parse_output(problems, solutions, Database.get_depots_coords(list(o_map.keys())), list(o_map.keys()))
+    #parse_output(problems, solutions, Database.get_depots_coords(list(o_map.keys())), list(o_map.keys()))
 
 
 if __name__ == "__main__":
-    seed(20)
+    seed(datetime.datetime.now().timestamp())
     run()

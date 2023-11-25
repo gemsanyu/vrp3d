@@ -1,4 +1,5 @@
 from random import seed
+import datetime
 
 from data.database import Database
 
@@ -9,5 +10,5 @@ def run():
 
 
 if __name__ == "__main__":
-    seed(20)
+    seed(datetime.datetime.now().timestamp())
     run()
