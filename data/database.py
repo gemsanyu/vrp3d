@@ -330,7 +330,111 @@ class DBDeliveryTrouble:
         )
 
 
+class DBProductInstance:
+    def __init__(self, db_result: Tuple):
+        self.id = db_result[0]
+        self.cardboardbox_id = db_result[1]
+        self.order_id = db_result[2]
 
+    def dump(self):
+        return (
+            self.id,
+            self.cardboardbox_id,
+            self.order_id
+        )
+    
+class DBCardboardBoxInstance:
+    def __init__(self, db_result: Tuple):
+        self.id = db_result[0]
+        self.product_id = db_result[1]
+        self.order_id = db_result[2]
+
+    def dump(self):
+        return (
+            self.id,
+            self.product_id,
+            self.order_id
+        )
+    
+
+class DBPackingProductVehicle:
+    def __init__(self, db_result: Tuple):
+        self.shipment_id = db_result[0]
+        self.product_intance_id = db_result[1]
+        self.insertion_order = db_result[2]
+        self.pos_x = db_result[3]
+        self.pos_y = db_result[4]
+        self.pos_z = db_result[5]
+        self.size_x = db_result[6]
+        self.size_y = db_result[7]
+        self.size_z = db_result[8]
+
+
+    def dump(self):
+        return (
+            self.shipment_id,
+            self.product_intance_id,
+            self.insertion_order,
+            self.pos_x,
+            self.pos_y,
+            self.pos_z,
+            self.size_x,
+            self.size_y,
+            self.size_z
+        )
+
+class DBPackingProductCardboardBox:
+    def __init__(self, db_result: Tuple):
+        self.cardboardbox_intance_id = db_result[0]
+        self.product_intance_id = db_result[1]
+        self.insertion_order = db_result[2]
+        self.pos_x = db_result[3]
+        self.pos_y = db_result[4]
+        self.pos_z = db_result[5]
+        self.size_x = db_result[6]
+        self.size_y = db_result[7]
+        self.size_z = db_result[8]
+
+
+    def dump(self):
+        return (
+            self.cardboardbox_intance_id,
+            self.product_intance_id,
+            self.insertion_order,
+            self.pos_x,
+            self.pos_y,
+            self.pos_z,
+            self.size_x,
+            self.size_y,
+            self.size_z
+        )
+
+class DBPackingCardboardBoxVehicle:
+    def __init__(self, db_result: Tuple):
+        self.shipment_id = db_result[0]
+        self.cardboardbox_intance_id = db_result[1]
+        self.insertion_order = db_result[2]
+        self.pos_x = db_result[3]
+        self.pos_y = db_result[4]
+        self.pos_z = db_result[5]
+        self.size_x = db_result[6]
+        self.size_y = db_result[7]
+        self.size_z = db_result[8]
+
+
+    def dump(self):
+        return (
+            self.shipment_id,
+            self.cardboardbox_intance_id,
+            self.insertion_order,
+            self.pos_x,
+            self.pos_y,
+            self.pos_z,
+            self.size_x,
+            self.size_y,
+            self.size_z
+        )
+    
 
 class Database:
     Database = None
@@ -349,6 +453,13 @@ class Database:
     ORDER_DETAIL = "ORDERDETAIL"
     ROUTE_DATA = "ROUTEDATA"
     DELIVERY_TROUBLE = "DELIVERYTROUBLE"
+    PRODUCT_INSTANCE = "PRODUCTINSTANCE"
+    CARDBOARDBOX_INSTANCE = "CARDBOARDBOXINSTANCE"
+    PACKING_PRODUCT_VEHICLE = "PACKINGPRODUCTVEHICLE"
+    PACKING_PRODUCT_CARDBOARDBOX = "PACKINGPRODUCTCARDBOARDBOX"
+    PACKING_CARDBOARDBOX_VEHICLE = "PACKINGCARDBOARDBOXVEHICLE"
+    
+
 
     DBType = {
         RELATION : DBRelation,
@@ -363,7 +474,12 @@ class Database:
         ORDERS : DBOrders,
         ORDER_DETAIL : DBOrderDetail,
         ROUTE_DATA : DBRouteData,
-        DELIVERY_TROUBLE : DBDeliveryTrouble
+        DELIVERY_TROUBLE : DBDeliveryTrouble,
+        PRODUCT_INSTANCE : DBProductInstance,
+        CARDBOARDBOX_INSTANCE : DBCardboardBoxInstance,
+        PACKING_PRODUCT_VEHICLE : DBPackingProductVehicle,
+        PACKING_PRODUCT_CARDBOARDBOX : DBPackingProductCardboardBox,
+        PACKING_CARDBOARDBOX_VEHICLE : DBPackingCardboardBoxVehicle
     }
 
     DRIVER_ID = "DRIVER_ID"
@@ -661,7 +777,7 @@ class Database:
                 vec = problem.vehicle_list[j]
                 db_do = DBShipment((last_do_id, vec.id, branch_id, datetime.now(), "On-Delivery", problem.distance_cost_list[j], problem.weight_cost_list[j]))
                 Database.dump_to_database(Database.SHIPMENT, [db_do.dump()])
-                last_do_id += 1
+                
 
                 Database.delete(Database.AVAILABLE_VEHICLE, ["vehicle_id"], [[int(vec.id)]])
 
@@ -673,6 +789,45 @@ class Database:
                     Database.dump_to_database(Database.ROUTE_DATA, [DBRouteData((last_route_data_id, order.customer_id, db_do.id, k, None, None)).dump()])
                     k += 1
                     last_route_data_id += 1
+                
+                vec_box = vec.box
+                positions, sizes = vec_box.generate_packing_information()
+                for insertion_order, item in enumerate(vec_box.packed_items):
+                    if isinstance(item, Box):
+                        last_cb_instance_id = Database.get_max_id(Database.CARDBOARDBOX_INSTANCE) + 1
+                        order_id = item.packed_items[0].order_id
+                        item_id = item.id.split('-')[-1]
+                        print(item.id)
+                        cb_instance = DBCardboardBoxInstance((last_cb_instance_id, item_id, order_id))
+                        packing_cbv_instance = DBPackingCardboardBoxVehicle((last_do_id, last_cb_instance_id, insertion_order + 1, 
+                                                      positions[insertion_order][0], positions[insertion_order][1], positions[insertion_order][2], 
+                                                      sizes[insertion_order][0], sizes[insertion_order][1], sizes[insertion_order][2]
+                                                      ))
+                        print(cb_instance.dump())
+                        Database.dump_to_database(Database.CARDBOARDBOX_INSTANCE, [cb_instance.dump()])
+                        Database.dump_to_database(Database.PACKING_CARDBOARDBOX_VEHICLE, [packing_cbv_instance.dump()])
+                        med_positions, med_sizes = item.generate_packing_information()
+                        for med_insertion_order, med in enumerate(item.packed_items):
+                            last_prod_instance_id = Database.get_max_id(Database.PRODUCT_INSTANCE) + 1
+                            prod_instance = DBProductInstance((last_prod_instance_id, med.id, order_id))
+                            packing_mcb_instance = DBPackingProductCardboardBox((last_cb_instance_id, last_prod_instance_id, med_insertion_order + 1,
+                                                                        med_positions[med_insertion_order][0], med_positions[med_insertion_order][1], med_positions[med_insertion_order][2], 
+                                                                        med_sizes[med_insertion_order][0], med_sizes[med_insertion_order][1], med_sizes[med_insertion_order][2]
+                                                                        ))
+                            Database.dump_to_database(Database.PRODUCT_INSTANCE, [prod_instance.dump()])
+                            Database.dump_to_database(Database.PACKING_PRODUCT_CARDBOARDBOX, [packing_mcb_instance.dump()])
+
+                    elif isinstance(item, Medicine):
+                        last_prod_instance_id = Database.get_max_id(Database.PRODUCT_INSTANCE) + 1
+                        prod_instance = DBProductInstance((last_prod_instance_id, item.id, item.order_id))
+                        packing_mv = DBPackingProductVehicle((last_do_id, last_prod_instance_id, insertion_order + 1, 
+                                                            positions[insertion_order][0], positions[insertion_order][1], positions[insertion_order][2], 
+                                                            sizes[insertion_order][0], sizes[insertion_order][1], sizes[insertion_order][2]
+                                                            ))
+                        Database.dump_to_database(Database.PRODUCT_INSTANCE, [prod_instance.dump()])
+                        Database.dump_to_database(Database.PACKING_PRODUCT_VEHICLE, [packing_mv.dump()])
+
+                last_do_id += 1
         
         # change the status of unsent orders to "Not-Sent"
         Database.update(Database.ORDERS, ["status"], [["Pending"]], ["status"], ["Not-Sent"])

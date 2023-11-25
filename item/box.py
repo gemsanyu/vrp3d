@@ -251,3 +251,13 @@ class Box(Item):
         os.chdir(chdir_out)
 
         plt.close()
+
+    def generate_packing_information(self):
+        self.packed_items = sorted(self.packed_items, key=lambda item: item.insertion_order)
+        positions = []
+        sizes = []
+        for item in self.packed_items:
+            positions.append(item.position)
+            sizes.append(item.size)
+        
+        return positions, sizes
