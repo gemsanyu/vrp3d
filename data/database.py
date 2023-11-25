@@ -800,13 +800,11 @@ class Database:
                         last_cb_instance_id = Database.get_max_id(Database.CARDBOARDBOX_INSTANCE) + 1
                         order_id = item.packed_items[0].order_id
                         item_id = item.id.split('-')[-1]
-                        print(item.id)
                         cb_instance = DBCardboardBoxInstance((last_cb_instance_id, item_id, order_id))
                         packing_cbv_instance = DBPackingCardboardBoxVehicle((last_do_id, last_cb_instance_id, insertion_order + 1, 
                                                       positions[insertion_order][0], positions[insertion_order][1], positions[insertion_order][2], 
                                                       sizes[insertion_order][0], sizes[insertion_order][1], sizes[insertion_order][2]
                                                       ))
-                        print(cb_instance.dump())
                         Database.dump_to_database(Database.CARDBOARDBOX_INSTANCE, [cb_instance.dump()])
                         Database.dump_to_database(Database.PACKING_CARDBOARDBOX_VEHICLE, [packing_cbv_instance.dump()])
                         med_positions, med_sizes = item.generate_packing_information()
