@@ -628,6 +628,7 @@ class Database:
         return [Database.random_medicine(order_id, customer_id, number) for i in range(number_of_medicines)]
 
     def generate_random_order(max_each_quantity, max_total_quantity):
+        used_product_ids = []
         customer = random.choice(Database.get_all(Database.RELATION))
         sum_quantity = 0
         last_order_id = Database.get_max_id(Database.ORDERS) + 1
@@ -639,6 +640,8 @@ class Database:
             current_quantity = min(max_total_quantity - sum_quantity, random.randint(1, max_each_quantity))
             sum_quantity += current_quantity
             med = Database.random_medicine(last_order_id, customer.id, 0)
+            while med.id in used_product_ids:
+                med = Database.random_medicine(last_order_id, customer.id, 0)
             db_orderdetail = (last_order_id, med.id, current_quantity)
             Database.dump_to_database(Database.ORDER_DETAIL, [db_orderdetail])
 
