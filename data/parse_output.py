@@ -14,7 +14,6 @@ import shutil
 import os
 
 def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_name="Dummy"):
-
     folder = 'PackingResults'
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -43,8 +42,6 @@ def parse_output(problems, solutions, depot_coords, kode_cabangs, output_file_na
                     vehicle.box.generate_packing_animation(str(vehicle.id), "PackingResults", "..")
 
                     file.write(f"{vehicle.id},{vehicle.vehicle_type},{vehicle.vendor},{kode_cabang},{depot_coords[k][0]},{depot_coords[k][1]},-1")
-
-                    print(c_tour_list)
 
                     tempitems = []
 

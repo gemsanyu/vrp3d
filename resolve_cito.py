@@ -10,18 +10,21 @@ from vrp3d.vrp3d import VRP3D
 from data.parse_output import parse_output, parse_input
 from data.database import Database
 
+import sys
+
 
 def run():
     Database.Initialize()
-    Database.generate_random_orders(9, 3, 10)
-    Database.generate_available_vehicles(10)
+    order_ids = sys.argv
+    for order in order_ids:
+        order = int(order)
 
     # map id cabang ke list of order
     o_map = {}
     # map id cabang ke list of vec
     v_map = {}
     
-    order_list1 = Database.get_pending_orders()
+    order_list1 = Database.get_orders_by_ids()
     for order in order_list1:
         id_cabang = Database.get_by_columns(Database.ORDERS, ["id"], [[order.id]])[0].branch_id
         
