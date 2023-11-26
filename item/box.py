@@ -115,7 +115,6 @@ class Box(Item):
     """
     def insert(self, ep_i: int, item:Item):
         position = self.ep_list[ep_i,:]
-        print("insert at", position, item.size)
         self.filled_volume += item.volume
         self.weight += item.weight
         item.position = position

@@ -56,7 +56,6 @@ class Room:
                 # colorList = ["black", "blue", "magenta", "orange"]
                 counter = 0
                 for item in pallet.packed_items:
-                    print(item.position,"----------")
                     x,y,z = item.position + rpos + ppos
                     # print(item.position, rpos, ppos, x,y,z)
                     # color = colorList[counter % len(colorList)]

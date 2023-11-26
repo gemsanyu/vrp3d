@@ -53,13 +53,13 @@ def cmp_pallet_priority(ip1: InsertPosition, ip2: InsertPosition):
     return 0
     
 def cmp_pallet_not_priority(ip1: InsertPosition, ip2: InsertPosition):
-    if ip1.pallet.position[2]>ip2.pallet.position[2]:
-        return 1
-    if ip1.pallet.position[2]<ip2.pallet.position[2]:
-        return -1
     if ip1.pallet.distance_to_door < ip2.pallet.distance_to_door:
         return 1
     if ip1.pallet.distance_to_door > ip2.pallet.distance_to_door:
+        return -1
+    if ip1.pallet.position[2]>ip2.pallet.position[2]:
+        return 1
+    if ip1.pallet.position[2]<ip2.pallet.position[2]:
         return -1
     if ip1.pallet.filled_volume > ip2.pallet.filled_volume:
         return -1
@@ -108,7 +108,6 @@ def put_items_in_room(room: Room,
         ip_i, ep_i = find_first_ep(ip_list, item)
         if ip_i == -1:
             continue
-        print("hi",ip_list[ip_i].pallet.id,ep_i)
         ip_list[ip_i].pallet.insert(ep_i, item)
         packed_items += [item]
         for i in reversed(range(len(item_list))):
