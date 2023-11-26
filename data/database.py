@@ -141,6 +141,9 @@ class DBVehicle:
         self.max_duration = db_result[10]
         self.driver_id = db_result[11]
         self.branch_id = db_result[12]
+        self.status = db_result[13],
+        self.current_shipment_id = db_result[14],
+        self.current_routedata_id = db_result[15]
 
     def dump(self):
         return (
@@ -214,18 +217,6 @@ class DBDriver:
             self.name
         )
 
-class DBAvailableVehicle:
-    def __init__(self, db_result: Tuple):
-        self.id = db_result[0]
-        self.vehicle_id = db_result[1]
-        self.available_date = db_result[2]
-
-    def dump(self):
-        return (
-            self.id,
-            self.vehicle_id,
-            self.available_date,
-        )
 
 class DBShipment:
     def __init__(self, db_result: Tuple):
@@ -455,7 +446,6 @@ class Database:
     CARDBOARD_BOX = "CARDBOARDBOX"
     DELIVERY_CATEGORY = "DELIVERYCATEGORY"
     DRIVER = "DRIVER"
-    AVAILABLE_VEHICLE = "AVAILABLEVEHICLE"
     SHIPMENT = "SHIPMENT"
     ORDERS = "ORDERS"
     ORDER_DETAIL = "ORDERDETAIL"
@@ -477,7 +467,6 @@ class Database:
         CARDBOARD_BOX : DBCardboardBox,
         DELIVERY_CATEGORY : DBDeliveryCategory,
         DRIVER : DBDriver,
-        AVAILABLE_VEHICLE : DBAvailableVehicle,
         SHIPMENT : DBShipment,
         ORDERS : DBOrders,
         ORDER_DETAIL : DBOrderDetail,
@@ -647,7 +636,7 @@ class Database:
         while sum_quantity < max_total_quantity:
             current_quantity = min(max_total_quantity - sum_quantity, random.randint(1, max_each_quantity))
             sum_quantity += current_quantity
-            med = Database.random_medicine(last_order_id, customer.id, 0)
+            med = Database.random_medicine(last_order_id, customer.id, 0)   
             while med.id in used_product_ids:
                 med = Database.random_medicine(last_order_id, customer.id, 0)
             used_product_ids.append(med.id)
@@ -721,41 +710,24 @@ class Database:
 
 
     def generate_available_vehicles(number_of_vehicle):
-        vehicles = []
-        Database.Cursor.execute(f"select * from Vehicle where Vehicle.id not in (select vehicle_id from AvailableVehicle)")
-        myresult = Database.Cursor.fetchall()
-        
-        vehicles = []
-        for res in myresult:
-            vehicles.append(DBVehicle(res))
-
-        #vehicles = Database.get_all(Database.VEHICLE)
+        vehicles = Database.get_all(Database.VEHICLE)
         
         random.shuffle(vehicles)
-        generated_vehicles = vehicles[:number_of_vehicle]
+        vehicles = vehicles[:number_of_vehicle]
 
-        last_avail_vehicle_id = Database.get_max_id(Database.AVAILABLE_VEHICLE) + 1
-        for vehicle in generated_vehicles:
-            avail_vehicle = DBAvailableVehicle((last_avail_vehicle_id, vehicle.id, datetime.now())).dump()
-            last_avail_vehicle_id += 1
-            Database.dump_to_database(Database.AVAILABLE_VEHICLE, [avail_vehicle])
+        for vehicle in vehicles:
+            Database.update(Database.VEHICLE, ["ID"], [[vehicle.id]], ["STATUS"], ["Available"])
 
     def get_available_vehicles():
-        vehicles = Database.get_all(Database.AVAILABLE_VEHICLE)
-        vehicles2 = Database.get_by_columns(Database.VEHICLE, ["ID"], [[vec.vehicle_id for vec in vehicles]])
+        vehicles = Database.get_by_columns(Database.VEHICLE, ["STATUS"], [["Available"]])
         vecs = [create_vehicle(vec.vendor, np.asanyarray([vec.length,vec.width,vec.height], dtype=np.int64), 
-                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles2]
+                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles]
         return vecs
         
     def get_available_vehicles_by_branch(branch_id):
-        vehicles = Database.get_all(Database.AVAILABLE_VEHICLE)
-        vehicles2 = Database.get_by_columns(Database.VEHICLE, ["ID"], [[vec.vehicle_id for vec in vehicles]])
-        vehicles3 = []
-        for vec in vehicles2:
-            if vec.branch_id == branch_id:
-                vehicles3.append(vec)
+        vehicles = Database.get_by_columns(Database.VEHICLE, ["STATUS", "BRANCH_ID"], [["Available"], [branch_id]])
         vecs = [create_vehicle(vec.vendor, np.asanyarray([vec.length,vec.width,vec.height], dtype=np.int64), 
-                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles3]
+                               vec.max_weight, vec.cost_per_km, vec.cost_per_kg, TEMP_CLASS[vec.delivery_category], vec.max_duration, vec.type, vec.id) for vec in vehicles]
         return vecs
 
 
@@ -790,8 +762,7 @@ class Database:
                 db_do = DBShipment((last_do_id, vec.id, branch_id, datetime.now(), "On-Delivery", problem.distance_cost_list[j], problem.weight_cost_list[j]))
                 Database.dump_to_database(Database.SHIPMENT, [db_do.dump()])
                 
-
-                Database.delete(Database.AVAILABLE_VEHICLE, ["vehicle_id"], [[int(vec.id)]])
+                Database.update(Database.VEHICLE, ["ID"], [[vec.id]], ["STATUS", "CURRENT_SHIPMENT_ID"], ["On-Delivery", last_do_id])
 
                 k = 1
                 for tour in c_tour_list:
