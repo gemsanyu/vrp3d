@@ -255,6 +255,7 @@ class DBOrders:
         self.branch_id = db_result[2]
         self.shipment_id = db_result[3]
         self.status = db_result[4]
+        self.order_date = db_result[5]
 
     def dump(self):
         return (
@@ -262,7 +263,8 @@ class DBOrders:
             self.relation_id,
             self.branch_id,
             self.shipment_id,
-            self.status
+            self.status,
+            self.order_date
         )
 
 class DBOrderDetail:
@@ -639,7 +641,7 @@ class Database:
         sum_quantity = 0
         last_order_id = Database.get_max_id(Database.ORDERS) + 1
 
-        db_order = (last_order_id, customer.id, customer.branch_id, None, "Pending")
+        db_order = (last_order_id, customer.id, customer.branch_id, None, "Pending", datetime.now())
 
         Database.dump_to_database(Database.ORDERS, [db_order])
         while sum_quantity < max_total_quantity:

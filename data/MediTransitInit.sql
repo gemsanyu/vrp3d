@@ -1,4 +1,5 @@
 
+
 drop database if exists MediTransit;
 
 create database MediTransit;
@@ -288,6 +289,7 @@ CREATE TABLE `orders` (
   `branch_id` int DEFAULT NULL,
   `shipment_id` int DEFAULT NULL,
   `status` enum('Pending','Not-Sent','On-Delivery','Delivered') DEFAULT NULL,
+  `order_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `shipment_id` (`shipment_id`),
   CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`shipment_id`) REFERENCES `shipment` (`id`)
@@ -619,4 +621,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-11-25 23:38:20
+-- Dump completed on 2023-11-26 12:02:00
