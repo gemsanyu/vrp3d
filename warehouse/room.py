@@ -81,6 +81,7 @@ class Room:
             for pallet in rack.pallet_list:
                 pallet_dict = {}
                 pallet_dict["position"] = pallet.position.tolist()
+                pallet_dict["projected_position"] =  (rack.position+pallet.position).tolist()
                 pallet_dict["size"] = pallet.size.tolist()
                 pallet_dict["items"] = []
                 for item in pallet.packed_items:
@@ -91,7 +92,11 @@ class Room:
                     item_dict["position"] = item.size.tolist()
                     item_dict["is_new"] = item.is_new
                     item_dict["is_fast_moving"] = item.is_fast_moving
+                    item_dict["pallet_id"] = pallet.id
+                    item_dict["rack_id"] = rack.id
+                    item_dict["projected_position"] = (rack.position + pallet.position + item.position).tolist()
                     pallet_dict["items"] += [item_dict]
+
                 rack_dict["pallets"] += [pallet_dict]
             room_dict["racks"] += [rack_dict]
         room_json = json.dumps(room_dict)

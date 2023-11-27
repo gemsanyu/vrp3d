@@ -21,7 +21,7 @@ class Rack:
                  max_weight: int, 
                  name: str, 
                  pallet_list: List[Pallet],):
-        self.id = str(uuid1)
+        self.id = str(uuid1())
         self.name = name
         self.size = size
         self.position = position
