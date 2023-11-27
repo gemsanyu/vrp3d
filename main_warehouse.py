@@ -30,7 +30,7 @@ def get_pallets()-> List[Pallet]:
                      position=position,
                      max_weight=3000,
                      name="Top Pallet")
-    return [pallet_bot, pallet_mid]
+    return [pallet_bot]
     
 
 def get_racks()-> List[Rack]:
@@ -97,20 +97,19 @@ def get_racks()-> List[Rack]:
 def setup_warehouse()-> Room:
     rack_list = get_racks()
     return Room(rack_list)
-    
 
 if __name__ == '__main__':
     room = setup_warehouse()
     Database.Initialize()
-    duses = Database.random_duses(200)
+    duses = Database.random_duses(100)
     new_arrival_list = [(NewArrival(dus.size, dus.name, randint(0,1))) for i,dus in enumerate(duses)]
     
     room, packed_items = put_items_in_room(room, new_arrival_list)
-    print(len(packed_items))
     room.visualize()
-    # room_dict = {}
-    # for rack in room.rack_list:
-    #     for pallet in rack.pallet_list:
-
-    # new_arrival_list = [(NewArrival(dus.id, dus.size, dus.name, randint(0,1))) for dus in duses]
     
+    duses = Database.random_duses(50)
+    new_arrival_list = [(NewArrival(dus.size, dus.name, randint(0,1), True)) for dus in duses]
+    room, packed_items = put_items_in_room(room, new_arrival_list)
+    
+    room_json = room.to_json()
+    print(room_json)

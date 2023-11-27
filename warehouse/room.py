@@ -1,3 +1,4 @@
+import json
 from typing import List
 
 import numpy as np
@@ -65,3 +66,34 @@ class Room:
                             color=color,text_annot=str(item.insertion_order))
                     counter = counter + 1  
         plt.show() 
+    
+    def to_json(self):
+        room_dict = {}
+        room_dict["size"] = self.size.tolist()
+        room_dict["door_size"] = self.door_size.tolist()
+        room_dict["door_position"] = self.door_position.tolist()
+        room_dict["racks"] = []
+        for rack in self.rack_list:
+            rack_dict = {}
+            rack_dict["position"] = rack.position.tolist()
+            rack_dict["size"] = rack.size.tolist()
+            rack_dict["pallets"] = []
+            for pallet in rack.pallet_list:
+                pallet_dict = {}
+                pallet_dict["position"] = pallet.position.tolist()
+                pallet_dict["size"] = pallet.size.tolist()
+                pallet_dict["items"] = []
+                for item in pallet.packed_items:
+                    item_dict = {}
+                    item_dict["id"] = item.id
+                    item_dict["name"] = item.name
+                    item_dict["size"] = item.size.tolist()
+                    item_dict["position"] = item.size.tolist()
+                    item_dict["is_new"] = item.is_new
+                    item_dict["is_fast_moving"] = item.is_fast_moving
+                    pallet_dict["items"] += [item_dict]
+                rack_dict["pallets"] += [pallet_dict]
+            room_dict["racks"] += [rack_dict]
+        room_json = json.dumps(room_dict)
+        return room_json
+            
